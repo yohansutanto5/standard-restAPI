@@ -24,6 +24,7 @@ type Student struct {
 type StudentService interface {
 	CreateStudent(student *Student) error
 	GetByID(id int) (*Student, error)
+	Update(data *Student) error
 	DeleteByID(id int) error
 	New(FirstName, LastName string, id int) Student
 	GetList() []Student
@@ -49,8 +50,14 @@ func (s *StudentServiceImpl) GetByID(id int) (*Student, error) {
 
 func (s *StudentServiceImpl) DeleteByID(id int) error {
 	// Implementation for fetching a student by ID from the database
-	student := s.New("", "", id)
-	if err := s.db.First(student, id).Error; err != nil {
+	if err := s.db.Where("id = ?", id).Delete(&Student{}).Error; err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *StudentServiceImpl) Update(data *Student) error {
+	if err := s.db.Save(&data).Error; err != nil {
 		return err
 	}
 	return nil
@@ -89,10 +96,10 @@ func (s Student) Delete(db *gorm.DB) error {
 }
 
 type Course struct {
-	ID        uint `gorm:"primaryKey;autoIncrement"`
-	Title     string
-	TeacherID uint      // Many-to-One: Many courses are taught by one teacher
-	Students  []Student `gorm:"many2many:enrollments"` // Many-to-Many: Many students can enroll in many courses
+	ID         uint `gorm:"primaryKey;autoIncrement"`
+	Title      string
+	TeacherID  uint         // Many-to-One: Many courses are taught by one teacher
+	Enrollment []Enrollment `gorm:"many2many:enrollments"` // Many-to-Many: Many students can enroll in many courses
 }
 
 type Teacher struct {

@@ -32,25 +32,12 @@ func AddStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
 	c.JSON(http.StatusOK, constanta.SuccessMessage)
 }
 
-// func Add(c *gin.Context, data AddInput, db *sqlx.DB) {
-
-// 	// Validation
-
-// 	// Business Logic
-
-// 	// Query
-// 	transactionID, _ := c.Get("transactionID")
-// 	query := `
-// 	INSERT INTO template (name)
-// 	VALUES (:name)
-// 	RETURNING name`
-
-// 	// Result parsing
-// 	result, err := db.NamedExec(query, data)
-// 	if err != nil {
-// 		log.Error(util.ConvertToInt(transactionID), err.Error(), nil)
-// 	}
-
-// 	// Outputbuilder
-// 	c.JSON(http.StatusOK, gin.H{"message": result})
-// }
+func UpdateStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
+	var student = NewStudent(data.FirstName, data.LastName)
+	err := student.Insert(db)
+	if err != nil {
+		log.Error(util.GetTransactionID(c), err.Error(), nil)
+		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
+	}
+	c.JSON(http.StatusOK, constanta.SuccessMessage)
+}

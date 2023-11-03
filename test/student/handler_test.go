@@ -25,7 +25,7 @@ func TestCreateStudent(t *testing.T) {
 	data.FirstName = util.GenerateRandomString(5)
 	data.LastName = util.GenerateRandomString(4)
 	template.AddStudent(ctx, data, dbg)
-	if ctx.Writer.Status() != 200 {	
+	if ctx.Writer.Status() != 200 {
 		t.Fail()
 	}
 }

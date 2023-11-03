@@ -1,6 +1,7 @@
 package testtemplate
 
 import (
+	"app/model"
 	"app/pkg/log"
 	"app/service"
 	"fmt"
@@ -16,7 +17,7 @@ func TestMigrationTemplate(t *testing.T) {
 }
 
 func TestCreateTemplate(t *testing.T) {
-	var student service.Student
+	var student model.Student
 	student.FirstName = "halo3"
 	student.LastName = "babi3"
 

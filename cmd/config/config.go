@@ -1,12 +1,8 @@
 package config
 
 import (
-	"app/internal/template"
 	"encoding/json"
 	"os"
-
-	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type db struct {
@@ -74,8 +70,4 @@ func Load(env string) Configuration {
 	}
 
 	return config
-}
-
-func LoadRoutes(r *gin.Engine, db *gorm.DB) {
-	template.Templatendpoint(r, db)
 }

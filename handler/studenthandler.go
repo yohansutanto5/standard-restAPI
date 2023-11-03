@@ -1,31 +1,40 @@
-package template
+package handler
 
 import (
 	"app/constanta"
+	"app/db"
+	"app/model"
 	"app/pkg/log"
 	"app/pkg/util"
 	"app/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
-func GetStudent(c *gin.Context, db *gorm.DB) {
-	var student = service.NewStudentService(db)
+func GetStudent(c *gin.Context, student service.StudentService) {
 	// To DO handle filter and search
 	c.JSON(http.StatusOK, student.GetList())
 }
 
-func DeleteStudent(c *gin.Context, id int, db *gorm.DB) {
-	var student = service.NewStudentService(db)
+func DeleteStudent(c *gin.Context) {
+	dbService := db.GetContext(c)
+	// To do parsing data here
+	id := 1
+	var student = service.NewStudentService(dbService)
 	// To DO handle filter and search
 	c.JSON(http.StatusOK, student.DeleteByID(id))
 }
 
-func AddStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
-	var student = service.NewStudentService(db)
-	var newStudent service.Student
+func AddStudent(c *gin.Context) {
+	dbService := db.GetContext(c)
+	var data model.AddStudentIn
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	var student = service.NewStudentService(dbService)
+	var newStudent model.Student
 	newStudent.FirstName = data.FirstName
 	newStudent.LastName = data.LastName
 	err := student.CreateStudent(&newStudent)
@@ -37,9 +46,15 @@ func AddStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
 	c.JSON(http.StatusOK, constanta.SuccessMessage)
 }
 
-func UpdateStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
-	var student = service.NewStudentService(db)
-	var newStudent service.Student
+func UpdateStudent(c *gin.Context) {
+	dbService := db.GetContext(c)
+	var data model.AddStudentIn
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	var student = service.NewStudentService(dbService)
+	var newStudent model.Student
 	newStudent.FirstName = data.FirstName
 	newStudent.LastName = data.LastName
 

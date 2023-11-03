@@ -2,7 +2,7 @@ package service
 
 import (
 	"testing"
-
+	"app/model"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -10,13 +10,13 @@ type MockStudentService struct {
 	mock.Mock
 }
 
-func (m *MockStudentService) GetByID(id int) (*Student, error) {
+func (m *MockStudentService) GetByID(id int) (*model.Student, error) {
 	args := m.Called(id)
-	return args.Get(0).(*Student), nil
+	return args.Get(0).(*model.Student), nil
 }
 
 func TestHandlerStudent(t *testing.T) {
-	expected := &Student{
+	expected := &model.Student{
 		FirstName: "asd",
 		LastName:  "lolol",
 		ID:        123,

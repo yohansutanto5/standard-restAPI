@@ -2,7 +2,10 @@ package db
 
 import (
 	"app/cmd/config"
+	"app/pkg/log"
+	"app/pkg/util"
 
+	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
@@ -10,7 +13,7 @@ import (
 )
 
 type Database struct {
-	db *gorm.DB
+	Db *gorm.DB
 	// you can add redis connection here
 	// add elasticsearch here
 	// add slave connection here
@@ -23,8 +26,24 @@ func NewDatabase(config config.Configuration) *Database {
 		panic(err)
 	}
 	return &Database{
-		db: connection,
+		Db: connection,
 	}
+}
+
+func GetContext(c *gin.Context) *Database {
+	dbService, exists := c.Get("db")
+	if exists {
+		// Check if dbService is of the expected type
+		if db, ok := dbService.(*Database); ok {
+			return db
+		} else {
+			log.Error(util.GetTransactionID(c), "Failed to connect to DB", nil)
+		}
+	} else {
+		// Handle the case where the key "db" does not exist in the Gin context
+		log.Error(util.GetTransactionID(c), "Failed to connect to DB", nil)
+	}
+	return nil
 }
 
 func ConnectDB(username, password, host, dbName string) (*sqlx.DB, error) {

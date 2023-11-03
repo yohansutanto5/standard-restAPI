@@ -14,7 +14,9 @@ type AddStudentIn struct {
 }
 
 func Templatendpoint(r *gin.Engine, db *gorm.DB) *gin.Engine {
+	// studentService := service.NewStudentService(db)
 	r.GET("/template", func(c *gin.Context) {
+
 		GetStudent(c, db)
 	})
 	r.POST("/template", func(c *gin.Context) {

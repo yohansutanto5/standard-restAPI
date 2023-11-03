@@ -11,21 +11,30 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
-func main() {
+var database db.Database
+var dbconn *gorm.DB
+
+func init() {
 	// setup Configuration
 	var configuration config.Configuration = config.Load("dev")
 	f, _ := os.Create("gin.log")
 	gin.DefaultWriter = io.MultiWriter(f)
 
 	// setup DB connection
-	// dbconn, err := db.ConnectDB(configuration.Db.Username, configuration.Db.Password, configuration.Db.Host, configuration.Db.Database)
-	dbconn,err := db.GormInit(configuration)
+	var err error
+	dbconn, err = db.GormInit(configuration)
 	if err != nil {
 		panic(err)
 	}
-	// Setup Route
+
+	database = *db.NewDatabase(configuration)
+}
+
+func main() {
+	// Setup Gin Route
 	r := gin.New()
 	r.Use(requestLoggerMiddleware(), middleware, gin.LoggerWithFormatter(customLogFormatter), gin.Recovery())
 	config.LoadRoutes(r, dbconn)
@@ -36,6 +45,7 @@ func main() {
 func middleware(c *gin.Context) {
 	transactionID := generateTransactionID()
 	c.Set("transactionID", transactionID)
+	c.Set("db", database)
 	defer func() {
 		if err := recover(); err != nil {
 			// Handle the error, log it, and send an appropriate response.

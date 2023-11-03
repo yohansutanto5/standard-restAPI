@@ -10,7 +10,10 @@ import (
 )
 
 type Database struct {
-	connection *gorm.DB
+	db *gorm.DB
+	// you can add redis connection here
+	// add elasticsearch here
+	// add slave connection here
 }
 
 func NewDatabase(config config.Configuration) *Database {
@@ -20,7 +23,7 @@ func NewDatabase(config config.Configuration) *Database {
 		panic(err)
 	}
 	return &Database{
-		connection: connection,
+		db: connection,
 	}
 }
 

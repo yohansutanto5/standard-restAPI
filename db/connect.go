@@ -9,6 +9,21 @@ import (
 	"gorm.io/gorm"
 )
 
+type Database struct {
+	connection *gorm.DB
+}
+
+func NewDatabase(config config.Configuration) *Database {
+	connectionString := "host=localhost user=app password=app dbname=app search_path=app port=5432 sslmode=disable search_path=app"
+	connection, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+	return &Database{
+		connection: connection,
+	}
+}
+
 func ConnectDB(username, password, host, dbName string) (*sqlx.DB, error) {
 	connectionString := "user=" + username + " password=" + password + " host=" + host + " dbname=" + dbName + " sslmode=disable" + " search_path=app"
 	db, err := sqlx.Open("postgres", connectionString)

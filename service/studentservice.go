@@ -1,4 +1,4 @@
-package template
+package service
 
 import (
 	"time"

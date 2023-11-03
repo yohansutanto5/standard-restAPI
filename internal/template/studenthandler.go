@@ -4,6 +4,7 @@ import (
 	"app/constanta"
 	"app/pkg/log"
 	"app/pkg/util"
+	"app/service"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,20 +12,24 @@ import (
 )
 
 func GetStudent(c *gin.Context, db *gorm.DB) {
-	var student = NewStudentService(db)
+	var student = service.NewStudentService(db)
 	// To DO handle filter and search
 	c.JSON(http.StatusOK, student.GetList())
 }
 
 func DeleteStudent(c *gin.Context, id int, db *gorm.DB) {
-	var student = NewStudentService(db)
+	var student = service.NewStudentService(db)
 	// To DO handle filter and search
 	c.JSON(http.StatusOK, student.DeleteByID(id))
 }
 
 func AddStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
-	var student = NewStudent(data.FirstName, data.LastName)
-	err := student.Insert(db)
+	var student = service.NewStudentService(db)
+	var newStudent service.Student
+	newStudent.FirstName = data.FirstName
+	newStudent.LastName = data.LastName
+	err := student.CreateStudent(&newStudent)
+
 	if err != nil {
 		log.Error(util.GetTransactionID(c), err.Error(), nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
@@ -33,8 +38,12 @@ func AddStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
 }
 
 func UpdateStudent(c *gin.Context, data AddStudentIn, db *gorm.DB) {
-	var student = NewStudent(data.FirstName, data.LastName)
-	err := student.Insert(db)
+	var student = service.NewStudentService(db)
+	var newStudent service.Student
+	newStudent.FirstName = data.FirstName
+	newStudent.LastName = data.LastName
+
+	err := student.Update(&newStudent)
 	if err != nil {
 		log.Error(util.GetTransactionID(c), err.Error(), nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)

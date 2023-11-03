@@ -1,14 +1,14 @@
 package testtemplate
 
 import (
-	"app/internal/template"
 	"app/pkg/log"
+	"app/service"
 	"fmt"
 	"testing"
 )
 
 func TestMigrationTemplate(t *testing.T) {
-	err := dbg.AutoMigrate(&template.Department{}, &template.Teacher{}, &template.Enrollment{}, &template.Student{}, &template.Course{})
+	err := dbg.AutoMigrate(&service.Department{}, &service.Teacher{}, &service.Enrollment{}, &service.Student{}, &service.Course{})
 	if err != nil {
 		fmt.Println(err.Error())
 		t.Failed()
@@ -16,7 +16,7 @@ func TestMigrationTemplate(t *testing.T) {
 }
 
 func TestCreateTemplate(t *testing.T) {
-	var student template.Student
+	var student service.Student
 	student.FirstName = "halo3"
 	student.LastName = "babi3"
 
@@ -24,7 +24,7 @@ func TestCreateTemplate(t *testing.T) {
 }
 
 func TestGetListTemplate(t *testing.T) {
-	var student = template.NewStudentService(dbg)
+	var student = service.NewStudentService(dbg)
 	students := student.GetList()
 	log.PrintStruct(students)
 	if len(students) < 2 {

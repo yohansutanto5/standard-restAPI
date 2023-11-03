@@ -14,7 +14,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var database db.Database
+var database *db.Database
 var dbconn *gorm.DB
 
 func init() {
@@ -30,7 +30,7 @@ func init() {
 		panic(err)
 	}
 
-	database = *db.NewDatabase(configuration)
+	database = db.NewDatabase(configuration)
 }
 
 func main() {

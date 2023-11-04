@@ -18,7 +18,7 @@ var log = logrus.New()
 
 func init() {
 	// Set log file name using the current date
-	logFileName := "app-" + time.Now().Format("2006-01-02") + ".log"
+	logFileName := "/home/yohan/workspace/app-" + time.Now().Format("2006-01-02") + ".log"
 
 	// Open the log file for writing, create it if it doesn't exist
 	logFile, err := os.OpenFile(logFileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)

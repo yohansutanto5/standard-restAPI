@@ -19,7 +19,7 @@ type StudentService interface {
 	Update(data *model.Student) error
 	DeleteByID(id int) error
 	New(FirstName, LastName string, id int) model.Student
-	GetList() []model.Student
+	GetList() ([]model.Student, error)
 }
 
 type StudentServiceImpl struct {
@@ -68,11 +68,10 @@ func (s *StudentServiceImpl) New(FirstName, LastName string, id int) model.Stude
 	return st
 }
 
-func (s StudentServiceImpl) GetList() []model.Student {
-	var students []model.Student
-	res := s.db.Db.Find(&students)
-	if res.Error != nil {
-		return nil
+func (s StudentServiceImpl) GetList() ([]model.Student, error) {
+	students, err := s.db.GetListStudent()
+	if err != nil {
+		return nil, err
 	}
-	return students
+	return students, nil
 }

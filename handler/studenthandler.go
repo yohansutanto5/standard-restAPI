@@ -14,7 +14,14 @@ import (
 
 func GetStudent(c *gin.Context, student service.StudentService) {
 	// To DO handle filter and search
-	c.JSON(http.StatusOK, student.GetList())
+	result, err := student.GetList()
+	
+	if err != nil {
+		log.Error(util.GetTransactionID(c), err.Error(), nil)
+		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
+	} else {
+		c.JSON(http.StatusOK, result)
+	}
 }
 
 func DeleteStudent(c *gin.Context) {

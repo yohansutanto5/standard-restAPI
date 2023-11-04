@@ -15,7 +15,7 @@ import (
 func GetStudent(c *gin.Context, student service.StudentService) {
 	// To DO handle filter and search
 	result, err := student.GetList()
-	
+
 	if err != nil {
 		log.Error(util.GetTransactionID(c), err.Error(), nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
@@ -33,24 +33,29 @@ func DeleteStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, student.DeleteByID(id))
 }
 
-func AddStudent(c *gin.Context) {
-	dbService := db.GetContext(c)
+func AddStudent(c *gin.Context, student service.StudentService) {
+	// Cast data from request
 	var data model.AddStudentIn
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var student = service.NewStudentService(dbService)
+	// Handle bussiness logic here if any
+	// Construct Student Model with the request data
 	var newStudent model.Student
 	newStudent.FirstName = data.FirstName
 	newStudent.LastName = data.LastName
-	err := student.CreateStudent(&newStudent)
 
+	// Call create service
+	err := student.Create(&newStudent)
+
+	// Construct Response
 	if err != nil {
 		log.Error(util.GetTransactionID(c), err.Error(), nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
+	} else {
+		c.JSON(http.StatusOK, constanta.SuccessMessage)
 	}
-	c.JSON(http.StatusOK, constanta.SuccessMessage)
 }
 
 func UpdateStudent(c *gin.Context) {

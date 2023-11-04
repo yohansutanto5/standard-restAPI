@@ -14,7 +14,7 @@ func NewStudent(firstname, lastname string) model.Student {
 
 // StudentService defines the interface for managing students.
 type StudentService interface {
-	CreateStudent(student *model.Student) error
+	Create(student *model.Student) error
 	GetByID(id int) (*model.Student, error)
 	Update(data *model.Student) error
 	DeleteByID(id int) error
@@ -55,8 +55,8 @@ func (s *StudentServiceImpl) Update(data *model.Student) error {
 	return nil
 }
 
-func (s *StudentServiceImpl) CreateStudent(student *model.Student) error {
-	return s.db.Db.Create(student).Error
+func (s *StudentServiceImpl) Create(student *model.Student) error {
+	return s.db.InsertStudent(student)
 }
 
 func (s *StudentServiceImpl) New(FirstName, LastName string, id int) model.Student {

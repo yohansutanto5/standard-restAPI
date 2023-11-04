@@ -1,4 +1,4 @@
-package testtemplate
+package student_test
 
 import (
 	"app/cmd/config"

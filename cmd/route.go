@@ -15,7 +15,7 @@ func setupRoutes() *gin.Engine {
 
 	// Define The route Path
 	r.GET("/template", func(c *gin.Context) { handler.GetStudent(c, studentService) })
-	r.POST("/template", handler.AddStudent)
+	r.POST("/template", func(c *gin.Context) { handler.AddStudent(c, studentService) })
 	r.DELETE("/template/:id", handler.DeleteStudent)
 	r.PUT("/template/:id", handler.UpdateStudent)
 	return r

@@ -2,6 +2,7 @@ package db
 
 import (
 	"app/cmd/config"
+	"app/db"
 	"fmt"
 	"log"
 	"testing"
@@ -10,7 +11,7 @@ import (
 )
 
 func TestMigration(t *testing.T) {
-	Migration()
+	db.Migration()
 }
 
 var dbg *gorm.DB
@@ -18,7 +19,7 @@ var dbg *gorm.DB
 func TestMain(m *testing.M) {
 	configs := config.Load("dev")
 	var err error
-	dbg, err = GormInit(configs)
+	dbg, err = db.GormInit(configs)
 	if err != nil {
 		log.Fatal("asd")
 	} else {
@@ -28,7 +29,7 @@ func TestMain(m *testing.M) {
 }
 func TestGorm(t *testing.T) {
 	configs := config.Load("dev")
-	dbg, err := GormInit(configs)
+	dbg, err := db.GormInit(configs)
 	if err != nil {
 		t.Fail()
 	}

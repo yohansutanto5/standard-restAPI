@@ -1,12 +1,15 @@
 package log
 
-import "testing"
+import (
+	"app/pkg/log"
+	"testing"
+)
 
 func TestMain(m *testing.M) {
 	m.Run()
 }
 
 func TestInfo(t *testing.T) {
-	Info(1, "dasda", nil)
+	log.Info(1, "dasda", nil)
 
 }

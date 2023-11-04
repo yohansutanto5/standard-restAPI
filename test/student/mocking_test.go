@@ -1,8 +1,9 @@
-package service
+package student_test
 
 import (
-	"testing"
 	"app/model"
+	"testing"
+
 	"github.com/stretchr/testify/mock"
 )
 

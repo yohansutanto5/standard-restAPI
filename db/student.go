@@ -12,3 +12,7 @@ func (d *Database) GetListStudent() ([]model.Student, error) {
 	}
 	return students, nil
 }
+
+func (d *Database) InsertStudent(student *model.Student) error {
+	return d.Db.Create(student).Error
+}

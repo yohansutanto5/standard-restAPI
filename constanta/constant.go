@@ -12,4 +12,6 @@ const (
 	ErrorStatus             = 500
 	FailToConnectCode       = "APP-CONN-01"
 	InternalServerErrorCode = "APP-INTERNAL-01"
+	StatusOK                = 200
+	CodeOK                  = "APP-SUCCESS"
 )

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/constanta"
 	"app/pkg/log"
 	"fmt"
 	"math/rand"
@@ -13,7 +14,7 @@ func middleware(c *gin.Context) {
 	transactionID := generateTransactionID()
 	c.Set("transactionID", transactionID)
 	c.Set("db", database)
-	log.Info(transactionID, "incoming request", nil)
+	log.Info(transactionID, "incoming request", constanta.StatusOK, constanta.CodeOK)
 	defer func() {
 		if err := recover(); err != nil {
 			// Handle the error, log it, and send an appropriate response.
@@ -22,7 +23,6 @@ func middleware(c *gin.Context) {
 		}
 	}()
 	c.Next()
-	// Authentication here
 }
 
 func customLogFormatter(param gin.LogFormatterParams) string {

@@ -62,33 +62,29 @@ func Error(transactionID int, message string, code string, data interface{}) {
 	}).Error()
 }
 
-func Info(transactionID int, message string, data interface{}) {
-	customLog := CustomLog{
-		TransactionID: transactionID,
-		Level:         "INFO",
-		Message:       message,
-		Data:          data,
-	}
-	logWithFields(customLog)
+func Info(transactionID int, message string, status int, code string) {
+	log.WithFields(logrus.Fields{
+		"transactionID": transactionID,
+		"message":       message,
+		"status":        status,
+		"Code":          code,
+	}).Info()
 }
 
 func Fatal(message string) {
-	customLog := CustomLog{
-		TransactionID: 0,
-		Level:         "FATAL",
-		Message:       message,
-	}
-	logWithFields(customLog)
+	log.WithFields(logrus.Fields{
+		"message": message,
+	}).Fatal()
 }
 
 func Warning(transactionID int, message string, data interface{}) {
-	customLog := CustomLog{
-		TransactionID: transactionID,
-		Level:         "warning",
-		Message:       message,
-		Data:          data,
-	}
-	logWithFields(customLog)
+	log.WithFields(logrus.Fields{
+		"transactionID": transactionID,
+		"message":       message,
+		"data":          data,
+		"status":        constanta.ErrorStatus,
+		"Code":          "code",
+	}).Warning()
 }
 
 func PrintStruct(data interface{}) {

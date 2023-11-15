@@ -1,5 +1,33 @@
 # Golang Standard Rest-API
 
+    Lorem Ipsum 
+
+# Project Component
+
+    - Modular loosely coupled design
+    - Rest API back end service (GIN Framerwork)
+    - Event Driven Architecture (Kafka)
+    - SQL Database as main datastore (Postgresql)
+    - NoSQL Datase as cache and search (Redis,Elasticsearch)
+    - CI (Github action)
+    - CD (AWS EKS)
+    - Project management (JIRA)
+    - Logging (Logrus & EFK stack & Docker driver)
+    - Database Migration (golang-migrate with rollback mechanism)
+    - Application Configuration (JSON file + Env Variable)
+    - Validator (Go Playground)
+    - Project Repository (Github)
+    - Docker Image Registry (Docker Hub)
+    - High Availability (Database replication + EKS)
+    - Scheduler (gocron)
+    - External Integration
+    - API documentation (Postman)
+    - Automated Testing
+      - Jmeter (Load + stress test)
+      - Functional Testing (Postman)
+      - Regression Testing
+      - Testing management tools
+      - Unit Testing (Testify)
 
 ## Project Structure
 - handler >> dilarang ada bisnis logic here , response building, request mapping, 1st layer validator
@@ -9,34 +37,3 @@
 
 
 ## Tutorial to create new module/package
-
-## Deployment Procedure
-- github action
-- docker hub
-- Preparping Configuration
-
-## Automated Testing
-
-## Databases Setup
-Config reading
-Logging system
-Middleware
-Authentication
-Unit Testing 
-Database Connection
-Validation process
-Database Migration
-Database query parsing
-
-
-<!-- To be -->
-Scheduler system
-Logging system with docker driver and ELK stack
-Caching system
-Multi Database
-CICD
-external integration
-Regression automated testing
-Configuration reading with env variable
-
-

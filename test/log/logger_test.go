@@ -1,4 +1,4 @@
-package log
+package testlogger
 
 import (
 	"app/pkg/log"

@@ -18,7 +18,7 @@ func GetStudent(c *gin.Context, student service.StudentService) {
 
 	if err != nil {
 		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
-		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
+		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage+" : Transaction ID is "+util.ConvertToString(util.GetTransactionID(c)))
 	} else {
 		c.JSON(http.StatusOK, result)
 	}

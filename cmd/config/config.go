@@ -9,12 +9,22 @@ type db struct {
 	Username    string `json:"username"`
 	Password    string `json:"password"`
 	Host        string `json:"host"`
+	Port        string `json:"port"`
 	Database    string `json:"database"`
 	Schema      string `json:"schema"`
 	MaxOpenConn int    `json:"max_open_conn"`
 	MaxIdleConn int    `json:"max_idle_conn"`
+}
 
-	redis string
+type redis struct {
+	Address  string `json:"address"`
+	Password string `json:"password"`
+	DB       int    `json:"db"`
+}
+
+type cron struct {
+	Task1 string `json:"task_1"`
+	Task2 string `json:"task_2"`
 }
 type dbslave struct {
 	Username string `json:"username"`
@@ -40,6 +50,8 @@ type Configuration struct {
 	Dbslave dbslave `json:"dbslave"`
 	Auth    auth    `json:"auth"`
 	URL     url     `json:"url"`
+	Redis   redis   `json:"redis"`
+	Cron    cron    `json:"cron"`
 	Mode    int     `json:"mode"`
 }
 

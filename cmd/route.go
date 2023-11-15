@@ -10,7 +10,7 @@ import (
 func setupRoutes() *gin.Engine {
 	r := gin.New()
 	r.Use(middleware, gin.LoggerWithFormatter(customLogFormatter), gin.Recovery())
-	// Initiate all services
+	// Initiate all services and dependency
 	studentService := service.NewStudentService(database)
 
 	// Define The route Path

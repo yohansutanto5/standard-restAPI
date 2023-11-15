@@ -1,1 +1,3 @@
 FROM Golang
+
+go build .

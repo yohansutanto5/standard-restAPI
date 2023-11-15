@@ -26,7 +26,7 @@ func NewDatabase(config config.Configuration) *DataStore {
 	// Initiate Primary SQL Database
 	connectionString := "host=" + config.Db.Host + " user=" + config.Db.Username +
 		" password=" + config.Db.Password + " dbname=" + config.Db.Database +
-		" search_path=" + config.Db.Schema + " port=5432 sslmode=disable"
+		" search_path=" + config.Db.Schema + " port=" + config.Db.Port + " sslmode=disable"
 	sqlConnection, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to Initiate SQL Primary Database")
@@ -39,9 +39,9 @@ func NewDatabase(config config.Configuration) *DataStore {
 
 	// Initiate Redis Connection
 	redisClientOptions := &redis.Options{
-		Addr:     "redis-19069.c277.us-east-1-3.ec2.cloud.redislabs.com:19069",
-		Password: "7cotq2Rw1N0B3Z3uoYI3f9zW6no1hWqZ",
-		DB:       0,
+		Addr:     config.Redis.Address,
+		Password: config.Redis.Password,
+		DB:       config.Redis.DB,
 	}
 	redisClient := redis.NewClient(redisClientOptions)
 
@@ -53,6 +53,7 @@ func NewDatabase(config config.Configuration) *DataStore {
 
 	defer func() {
 		redisClient.Close()
+		sqlPoolConnection.Close()
 	}()
 
 	return &DataStore{
@@ -92,9 +93,4 @@ func ConnectDB(username, password, host, dbName string) (*sqlx.DB, error) {
 		return nil, err
 	}
 	return db, nil
-}
-
-func GormInit(config config.Configuration) (*gorm.DB, error) {
-	connectionString := "host=localhost user=app password=app dbname=app search_path=app port=5432 sslmode=disable search_path=app"
-	return gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 }

@@ -40,7 +40,6 @@ func AddStudent(c *gin.Context, student service.StudentService) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// Handle bussiness logic here if any
 	// Construct Student Model with the request data
 	var newStudent model.Student
 	newStudent.FirstName = data.FirstName

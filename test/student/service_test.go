@@ -20,7 +20,7 @@ func TestCreateTemplate(t *testing.T) {
 	student.FirstName = "halo3"
 	student.LastName = "babi3"
 
-	studenService.CreateStudent(&student)
+	studenService.Create(&student)
 }
 
 func TestGetListTemplate(t *testing.T) {

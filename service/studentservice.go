@@ -16,10 +16,10 @@ type StudentService interface {
 }
 
 type StudentServiceImpl struct {
-	db *db.Database
+	db *db.DataStore
 }
 
-func NewStudentService(db *db.Database) StudentService {
+func NewStudentService(db *db.DataStore) StudentService {
 	return &StudentServiceImpl{db: db}
 }
 

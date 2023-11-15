@@ -18,7 +18,7 @@ import (
 var ctx *gin.Context
 var configuration config.Configuration
 var dbg *gorm.DB
-var database *db.Database
+var database *db.DataStore
 var studenService service.StudentService
 
 func TestMain(m *testing.M) {

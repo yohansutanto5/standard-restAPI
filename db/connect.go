@@ -12,29 +12,29 @@ import (
 	"gorm.io/gorm"
 )
 
-type Database struct {
+type DataStore struct {
 	Db *gorm.DB
 	// you can add redis connection here
 	// add elasticsearch here
 	// add slave connection here
 }
 
-func NewDatabase(config config.Configuration) *Database {
+func NewDatabase(config config.Configuration) *DataStore {
 	connectionString := "host=localhost user=app password=app dbname=app search_path=app port=5432 sslmode=disable search_path=app"
 	connection, err := gorm.Open(postgres.Open(connectionString), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
-	return &Database{
+	return &DataStore{
 		Db: connection,
 	}
 }
 
-func GetContext(c *gin.Context) *Database {
+func GetContext(c *gin.Context) *DataStore {
 	dbService, exists := c.Get("db")
 	if exists {
 		// Check if dbService is of the expected type
-		if db, ok := dbService.(*Database); ok {
+		if db, ok := dbService.(*DataStore); ok {
 			return db
 		} else {
 			log.Error(util.GetTransactionID(c), "Failed to connect to DB", nil)

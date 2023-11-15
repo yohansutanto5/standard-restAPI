@@ -4,7 +4,7 @@ import (
 	"app/model"
 )
 
-func (d *Database) GetListStudent() ([]model.Student, error) {
+func (d *DataStore) GetListStudent() ([]model.Student, error) {
 	var students []model.Student
 	res := d.Db.Find(&students)
 	if res.Error != nil {
@@ -13,11 +13,11 @@ func (d *Database) GetListStudent() ([]model.Student, error) {
 	return students, nil
 }
 
-func (d *Database) InsertStudent(student *model.Student) error {
+func (d *DataStore) InsertStudent(student *model.Student) error {
 	return d.Db.Create(student).Error
 }
 
-func (d *Database) DeleteStudentByID(id int) error {
+func (d *DataStore) DeleteStudentByID(id int) error {
 	err := d.Db.Where("id = ?", id).Delete(&model.Student{}).Error
 	if err != nil {
 		return err
@@ -26,7 +26,7 @@ func (d *Database) DeleteStudentByID(id int) error {
 	}
 }
 
-func (d *Database) UpdateStudent(student *model.Student) error {
+func (d *DataStore) UpdateStudent(student *model.Student) error {
 	err := d.Db.Save(&student).Error
 	if err != nil {
 		return err

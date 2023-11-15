@@ -5,7 +5,7 @@ import (
 	"app/db"
 )
 
-var database *db.Database
+var database *db.DataStore
 
 func init() {
 	// setup Configuration

@@ -18,7 +18,7 @@ func middleware(c *gin.Context) {
 		if err := recover(); err != nil {
 			// Handle the error, log it, and send an appropriate response.
 			c.JSON(500, gin.H{"error": "Internal Server Error"})
-			log.Error(transactionID, "PANIC", err)
+			log.Fatal(fmt.Sprintf("%v", err))
 		}
 	}()
 	c.Next()

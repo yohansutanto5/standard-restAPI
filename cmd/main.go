@@ -18,7 +18,7 @@ func init() {
 func main() {
 	// Initiate UP SQL Migrations
 	// If fail will execute down migrations then exit the application
-	db.Migration()
+	// db.Migration()
 
 	// Setup Gin Route
 	r := setupRoutes()

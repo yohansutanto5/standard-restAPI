@@ -6,12 +6,15 @@ import (
 )
 
 type db struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Host     string `json:"host"`
-	Database string `json:"database"`
-	Schema   string `json:"schema"`
-	redis    string
+	Username    string `json:"username"`
+	Password    string `json:"password"`
+	Host        string `json:"host"`
+	Database    string `json:"database"`
+	Schema      string `json:"schema"`
+	MaxOpenConn int    `json:"max_open_conn"`
+	MaxIdleConn int    `json:"max_idle_conn"`
+
+	redis string
 }
 type dbslave struct {
 	Username string `json:"username"`

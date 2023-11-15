@@ -1,6 +1,7 @@
 package log
 
 import (
+	"app/constanta"
 	"os"
 	"time"
 
@@ -9,7 +10,8 @@ import (
 
 type CustomLog struct {
 	TransactionID int         `json:"transactionID"`
-	Level         string      `json:"level"`
+	Code          string      `json:"code"`
+	Status        int         `json:"status"`
 	Message       string      `json:"message"`
 	Data          interface{} `json:"data"`
 }
@@ -35,30 +37,29 @@ func init() {
 func logWithFields(customLog CustomLog) {
 	log.WithFields(logrus.Fields{
 		"transactionID": customLog.TransactionID,
-		"level":         customLog.Level,
 		"message":       customLog.Message,
 		"data":          customLog.Data,
 	}).Info() // Use Info as a generic log level; you can customize this as needed
 }
 
 func Debug(transactionID int, message string, data interface{}) {
-	customLog := CustomLog{
-		TransactionID: transactionID,
-		Level:         "DEBUG",
-		Message:       message,
-		Data:          data,
-	}
-	logWithFields(customLog)
+	log.WithFields(logrus.Fields{
+		"transactionID": transactionID,
+		"message":       message,
+		"data":          data,
+		"status":        constanta.DebugStatus,
+		"Code":          constanta.DebugCode,
+	}).Debug()
 }
 
-func Error(transactionID int, message string, data interface{}) {
-	customLog := CustomLog{
-		TransactionID: transactionID,
-		Level:         "ERROR",
-		Message:       message,
-		Data:          data,
-	}
-	logWithFields(customLog)
+func Error(transactionID int, message string, code string, data interface{}) {
+	log.WithFields(logrus.Fields{
+		"transactionID": transactionID,
+		"message":       message,
+		"data":          data,
+		"status":        constanta.ErrorStatus,
+		"Code":          code,
+	}).Error()
 }
 
 func Info(transactionID int, message string, data interface{}) {

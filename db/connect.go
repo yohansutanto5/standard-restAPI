@@ -2,8 +2,10 @@ package db
 
 import (
 	"app/cmd/config"
+	"app/constanta"
 	"app/pkg/log"
 	"app/pkg/util"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
@@ -30,6 +32,11 @@ func NewDatabase(config config.Configuration) *DataStore {
 		log.Fatal("Failed to Initiate SQL Primary Database")
 		panic(err)
 	}
+	sqlPoolConnection, _ := sqlConnection.DB()
+	sqlPoolConnection.SetMaxOpenConns(config.Db.MaxOpenConn)
+	sqlPoolConnection.SetMaxIdleConns(config.Db.MaxIdleConn)
+	sqlPoolConnection.SetConnMaxIdleTime(time.Hour)
+
 	// Initiate Redis Connection
 	redisClientOptions := &redis.Options{
 		Addr:     "redis-19069.c277.us-east-1-3.ec2.cloud.redislabs.com:19069",
@@ -61,11 +68,11 @@ func GetContext(c *gin.Context) *DataStore {
 		if db, ok := dbService.(*DataStore); ok {
 			return db
 		} else {
-			log.Error(util.GetTransactionID(c), "Failed to connect to DB", nil)
+			log.Error(util.GetTransactionID(c), "Failed to connect to DB", constanta.FailToConnectCode, nil)
 		}
 	} else {
 		// Handle the case where the key "db" does not exist in the Gin context
-		log.Error(util.GetTransactionID(c), "Failed to connect to DB", nil)
+		log.Error(util.GetTransactionID(c), "Failed to connect to DB", constanta.FailToConnectCode, nil)
 	}
 	return nil
 }

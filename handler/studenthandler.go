@@ -17,7 +17,7 @@ func GetStudent(c *gin.Context, student service.StudentService) {
 	result, err := student.GetList()
 
 	if err != nil {
-		log.Error(util.GetTransactionID(c), err.Error(), nil)
+		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
 	} else {
 		c.JSON(http.StatusOK, result)
@@ -50,7 +50,7 @@ func AddStudent(c *gin.Context, student service.StudentService) {
 
 	// Construct Response
 	if err != nil {
-		log.Error(util.GetTransactionID(c), err.Error(), nil)
+		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
 	} else {
 		c.JSON(http.StatusOK, constanta.SuccessMessage)
@@ -71,7 +71,7 @@ func UpdateStudent(c *gin.Context) {
 
 	err := student.Update(&newStudent)
 	if err != nil {
-		log.Error(util.GetTransactionID(c), err.Error(), nil)
+		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
 	}
 	c.JSON(http.StatusOK, constanta.SuccessMessage)

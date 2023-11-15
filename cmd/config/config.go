@@ -46,11 +46,11 @@ func Load(env string) Configuration {
 
 	switch env {
 	case "dev":
-		configFile = "/home/yohan/workspace/cmd/config/config_dev.json"
+		configFile = "/home/yohan/standard-restAPI/cmd/config/config_dev.json"
 	case "prd":
 		configFile = "/home/yohan/workspace/cmd/config/config_prd.json"
 	case "test":
-		configFile = "/home/yohan/workspace/cmd/config/config_test.json"
+		configFile = "/home/yohan/standard-restAPI/cmd/config/config_test.json"
 	default:
 		panic("Input ENV")
 	}

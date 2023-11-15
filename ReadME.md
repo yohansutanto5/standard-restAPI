@@ -35,6 +35,7 @@
     - Scheduler (gocron)
     - External Integration
     - API documentation (Postman)
+    - Health Checker API
     - Automated Testing
       - Jmeter (Load + stress test)
       - Functional Testing (Postman)

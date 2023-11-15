@@ -71,6 +71,15 @@ func Info(transactionID int, message string, data interface{}) {
 	logWithFields(customLog)
 }
 
+func Fatal(message string) {
+	customLog := CustomLog{
+		TransactionID: 0,
+		Level:         "FATAL",
+		Message:       message,
+	}
+	logWithFields(customLog)
+}
+
 func Warning(transactionID int, message string, data interface{}) {
 	customLog := CustomLog{
 		TransactionID: transactionID,

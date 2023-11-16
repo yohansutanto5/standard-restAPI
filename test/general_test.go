@@ -10,7 +10,7 @@ import (
 	"github.com/go-redis/redis"
 )
 
-func TestGetListStudent(t *testing.T) {
+func TestRedisCloud2(t *testing.T) {
 	configuration := config.Load("test")
 	ds := db.NewDatabase(configuration)
 	if ds.Redis == nil {

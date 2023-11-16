@@ -1,4 +1,4 @@
-package db
+package dbtest
 
 import (
 	"app/cmd/config"
@@ -14,6 +14,33 @@ import (
 var dbg *gorm.DB
 var ds *db.DataStore
 var configs config.Configuration
+
+type Product struct {
+	ID     int     `gorm:"primaryKey"`
+	Name   string  `gorm:"unique;size:12"`
+	Price  float64 `gorm:"size:12;type:int"`
+	Active bool
+	Code   string `gorm:"index"`
+	CartID int
+}
+
+type Cart struct {
+	ID      int `gorm:"primaryKey"`
+	Product []Product
+	Total   int
+}
+
+// User has and belongs to many languages, use `user_languages` as join table
+type User struct {
+	gorm.Model
+	Languages []*Language `gorm:"many2many:user_languages;"`
+}
+
+type Language struct {
+	gorm.Model
+	Name  string
+	Users []*User `gorm:"many2many:user_languages;"`
+}
 
 func TestMain(m *testing.M) {
 	configs = config.Load("test")
@@ -33,23 +60,8 @@ func TestMigration(t *testing.T) {
 	db.Migration(&configs, false)
 }
 
-type Product struct {
-	ID     int     `gorm:"primaryKey"`
-	Name   string  `gorm:"unique;size:12"`
-	Price  float64 `gorm:"size:12;type:int"`
-	Active bool
-	Code   string `gorm:"index"`
-	CartID int
-}
-
-type Cart struct {
-	ID      int `gorm:"primaryKey"`
-	Product []Product
-	Total   int
-}
-
 func TestGormRelation(t *testing.T) {
-	err := ds.Db.AutoMigrate(&model.Student{})
+	err := ds.Db.AutoMigrate(model.Student{})
 	if err != nil {
 		fmt.Println(err.Error())
 		t.FailNow()
@@ -68,18 +80,6 @@ func TestGormRelationCreate(t *testing.T) {
 		t.FailNow()
 		fmt.Println(res.Error.Error())
 	}
-}
-
-// User has and belongs to many languages, use `user_languages` as join table
-type User struct {
-	gorm.Model
-	Languages []*Language `gorm:"many2many:user_languages;"`
-}
-
-type Language struct {
-	gorm.Model
-	Name  string
-	Users []*User `gorm:"many2many:user_languages;"`
 }
 
 func TestGormRelation2(t *testing.T) {

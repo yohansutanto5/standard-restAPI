@@ -1,4 +1,4 @@
-package config
+package configtest
 
 import (
 	"app/cmd/config"

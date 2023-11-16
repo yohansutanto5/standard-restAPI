@@ -9,7 +9,7 @@ import (
 
 func setupRoutes() *gin.Engine {
 	r := gin.New()
-	r.Use(middleware, gin.LoggerWithFormatter(customLogFormatter), gin.Recovery())
+	r.Use(middleware, gin.Recovery())
 	// Initiate all services and dependency
 	studentService := service.NewStudentService(database)
 

@@ -3,6 +3,7 @@ package db
 import (
 	"app/cmd/config"
 	"app/db"
+	"app/model"
 	"fmt"
 	"log"
 	"testing"
@@ -28,7 +29,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestMigration(t *testing.T) {
-	
+
 	db.Migration(&configs, false)
 }
 
@@ -48,7 +49,7 @@ type Cart struct {
 }
 
 func TestGormRelation(t *testing.T) {
-	err := ds.Db.AutoMigrate(&Cart{})
+	err := ds.Db.AutoMigrate(&model.Student{})
 	if err != nil {
 		fmt.Println(err.Error())
 		t.FailNow()

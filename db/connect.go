@@ -51,10 +51,10 @@ func NewDatabase(config config.Configuration) *DataStore {
 		panic(err)
 	}
 
-	defer func() {
-		redisClient.Close()
-		sqlPoolConnection.Close()
-	}()
+	// defer func() {
+	// 	redisClient.Close()
+	// 	sqlPoolConnection.Close()
+	// }()
 
 	return &DataStore{
 		Db:    sqlConnection,

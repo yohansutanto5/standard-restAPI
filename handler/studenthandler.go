@@ -17,8 +17,13 @@ func GetStudent(c *gin.Context, student service.StudentService) {
 	result, err := student.GetList()
 
 	if err != nil {
-		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
-		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage+" : Transaction ID is "+util.ConvertToString(util.GetTransactionID(c)))
+		errorResponse := model.ErrorResponse{
+			TransactionID: util.GetTransactionID(c),
+			Message:       constanta.InternalServerErrorMessage,
+			Code:          constanta.CodeErrorService,
+			Details:       err.Error(),
+		}
+		c.JSON(http.StatusInternalServerError, errorResponse)
 	} else {
 		c.JSON(http.StatusOK, result)
 	}

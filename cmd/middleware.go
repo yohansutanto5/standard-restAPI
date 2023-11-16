@@ -4,7 +4,6 @@ import (
 	"app/constanta"
 	"app/model"
 	"app/pkg/log"
-	"fmt"
 	"math/rand"
 	"time"
 
@@ -39,7 +38,6 @@ func middleware(c *gin.Context) {
 	// Process the request
 	c.Next()
 
-	end := time.Now()
 	// Response logging
 	responseLog := model.CustomLog{
 		Agent:         c.Request.UserAgent(),
@@ -48,26 +46,12 @@ func middleware(c *gin.Context) {
 		Path:          c.Request.URL.Path,
 		TransactionID: transactionID,
 		Status:        c.Writer.Status(),
-		Duration:      end.Sub(start),
+		Duration:      time.Duration(time.Since(start).Milliseconds()),
 		Code:          constanta.CodeOK,
-		Message:       "Response Message please fix this and the code so that it is dynamic",
+		Message:       c.Errors.String(),
 	}
 	log.Info(responseLog)
 
-}
-
-func customLogFormatter(param gin.LogFormatterParams) string {
-	return fmt.Sprintf("%s - [%s] \"%s %s %s %d %s \"%s\" %s\"\n",
-		param.ClientIP,
-		param.TimeStamp.Format(time.RFC1123),
-		param.Method,
-		param.Path,
-		param.Request.Proto,
-		param.StatusCode,
-		param.Latency,
-		param.Request.UserAgent(),
-		param.ErrorMessage,
-	)
 }
 
 func generateTransactionID() int {

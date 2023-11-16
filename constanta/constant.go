@@ -7,11 +7,12 @@ const (
 
 // Status and Error Code
 const (
-	DebugCode               = "APP-DBG-01"
+	DebugCode               = "APP-DBG"
 	DebugStatus             = 999
 	ErrorStatus             = 500
-	FailToConnectCode       = "APP-CONN-01"
-	InternalServerErrorCode = "APP-INTERNAL-01"
+	FailToConnectCode       = "APP-CONN"
+	InternalServerErrorCode = "APP-SVR"
 	StatusOK                = 200
 	CodeOK                  = "APP-SUCCESS"
+	CodeErrorService        = "APP-SVR"
 )

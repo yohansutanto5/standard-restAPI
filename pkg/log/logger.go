@@ -30,39 +30,35 @@ func init() {
 func Debug(transactionID int, message string, data interface{}) {
 	log.WithFields(logrus.Fields{
 		"transactionID": transactionID,
-		"message":       message,
 		"data":          data,
 		"status":        constanta.DebugStatus,
 		"Code":          constanta.DebugCode,
-	}).Debug()
+	}).Debug(message)
 }
 
 func DebugIssue(transactionID int, message string, mode string, data interface{}) {
 	if mode == "debug" {
 		log.WithFields(logrus.Fields{
 			"transactionID": transactionID,
-			"message":       message,
 			"data":          data,
 			"status":        constanta.DebugStatus,
 			"Code":          constanta.DebugCode,
-		}).Debug()
+		}).Debug(message)
 	}
 }
 
 func Error(transactionID int, message string, code string, data interface{}) {
 	log.WithFields(logrus.Fields{
 		"transactionID": transactionID,
-		"message":       message,
 		"data":          data,
 		"status":        constanta.ErrorStatus,
 		"Code":          code,
-	}).Error()
+	}).Error(message)
 }
 
 func Info(param model.CustomLog) {
 	log.WithFields(logrus.Fields{
 		"transactionID": param.TransactionID,
-		"message":       param.Message,
 		"status":        param.Status,
 		"Code":          param.Code,
 		"clientIp":      param.ClientIp,
@@ -70,27 +66,22 @@ func Info(param model.CustomLog) {
 		"path":          param.Path,
 		"agent":         param.Agent,
 		"duration":      param.Duration,
-	}).Info()
+	}).Info(param.Message)
 }
 
 func Fatal(message string) {
-	log.WithFields(logrus.Fields{
-		"message": message,
-	}).Fatal()
+	log.Fatal(message)
 }
 
 func System(message string) {
-	log.WithFields(logrus.Fields{
-		"message": message,
-	}).Info()
+	log.Info(message)
 }
 
 func Warning(transactionID int, message string, data interface{}) {
 	log.WithFields(logrus.Fields{
 		"transactionID": transactionID,
-		"message":       message,
 		"data":          data,
 		"status":        constanta.ErrorStatus,
 		"Code":          "code",
-	}).Warning()
+	}).Warning(message)
 }

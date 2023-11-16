@@ -2,19 +2,12 @@ package log
 
 import (
 	"app/constanta"
+	"app/model"
 	"os"
 	"time"
 
 	"github.com/sirupsen/logrus"
 )
-
-type CustomLog struct {
-	TransactionID int         `json:"transactionID"`
-	Code          string      `json:"code"`
-	Status        int         `json:"status"`
-	Message       string      `json:"message"`
-	Data          interface{} `json:"data"`
-}
 
 var log = logrus.New()
 
@@ -34,14 +27,6 @@ func init() {
 	log.SetFormatter(&logrus.JSONFormatter{})
 }
 
-func logWithFields(customLog CustomLog) {
-	log.WithFields(logrus.Fields{
-		"transactionID": customLog.TransactionID,
-		"message":       customLog.Message,
-		"data":          customLog.Data,
-	}).Info() // Use Info as a generic log level; you can customize this as needed
-}
-
 func Debug(transactionID int, message string, data interface{}) {
 	log.WithFields(logrus.Fields{
 		"transactionID": transactionID,
@@ -50,6 +35,18 @@ func Debug(transactionID int, message string, data interface{}) {
 		"status":        constanta.DebugStatus,
 		"Code":          constanta.DebugCode,
 	}).Debug()
+}
+
+func DebugIssue(transactionID int, message string, mode string, data interface{}) {
+	if mode == "debug" {
+		log.WithFields(logrus.Fields{
+			"transactionID": transactionID,
+			"message":       message,
+			"data":          data,
+			"status":        constanta.DebugStatus,
+			"Code":          constanta.DebugCode,
+		}).Debug()
+	}
 }
 
 func Error(transactionID int, message string, code string, data interface{}) {
@@ -62,12 +59,17 @@ func Error(transactionID int, message string, code string, data interface{}) {
 	}).Error()
 }
 
-func Info(transactionID int, message string, status int, code string) {
+func Info(param model.CustomLog) {
 	log.WithFields(logrus.Fields{
-		"transactionID": transactionID,
-		"message":       message,
-		"status":        status,
-		"Code":          code,
+		"transactionID": param.TransactionID,
+		"message":       param.Message,
+		"status":        param.Status,
+		"Code":          param.Code,
+		"clientIp":      param.ClientIp,
+		"method":        param.Method,
+		"path":          param.Path,
+		"agent":         param.Agent,
+		"duration":      param.Duration,
 	}).Info()
 }
 
@@ -91,11 +93,4 @@ func Warning(transactionID int, message string, data interface{}) {
 		"status":        constanta.ErrorStatus,
 		"Code":          "code",
 	}).Warning()
-}
-
-func PrintStruct(data interface{}) {
-	customLog := CustomLog{
-		Data: data,
-	}
-	logWithFields(customLog)
 }

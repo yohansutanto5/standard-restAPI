@@ -1,7 +1,6 @@
 package scheduler
 
 import (
-	"app/constanta"
 	"app/pkg/log"
 	"fmt"
 
@@ -16,5 +15,5 @@ func Setup() {
 
 func task1() {
 	fmt.Println("Task 1 Executed")
-	log.Info(1, "task 1 executed", constanta.StatusOK, constanta.CodeOK)
+	log.Debug(1, "task 1 executed", nil)
 }

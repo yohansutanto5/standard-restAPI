@@ -28,7 +28,8 @@ func TestMain(m *testing.M) {
 }
 
 func TestMigration(t *testing.T) {
-	db.Migration(&configs)
+	
+	db.Migration(&configs, false)
 }
 
 type Product struct {

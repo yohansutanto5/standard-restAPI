@@ -11,21 +11,25 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func Migration(config *config.Configuration) {
+func Migration(config *config.Configuration, rollback bool) {
 	// Create a new migration instance
-	dbURL := fmt.Sprintf("postgress://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s",
+	dbURL := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s",
 		config.Db.Username, config.Db.Password, config.Db.Host, config.Db.Port, config.Db.Database, config.Db.Schema)
 
 	m, err := migrate.New(
-		"file://"+"/home/yohan/workspace/db/migration/",
+		"file://"+"/home/yohan/standard-restAPI/db/sql_migrations/",
 		dbURL,
 	)
 	if err != nil {
-		log.Fatal("Failed to create migration instance")
+		log.Fatal("Failed to create migration instance: " + err.Error())
 	}
 
 	// Run the specified migration action
-	err = m.Up()
+	if rollback {
+		err = m.Down()
+	} else {
+		err = m.Up()
+	}
 
 	if err != nil && err != migrate.ErrNoChange {
 		log.Fatal("Migration failed")

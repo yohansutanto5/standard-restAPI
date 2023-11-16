@@ -6,10 +6,11 @@ import (
 )
 
 var database *db.DataStore
+var configuration config.Configuration
 
 func init() {
 	// setup Configuration
-	var configuration config.Configuration = config.Load("test")
+	configuration = config.Load("test")
 
 	// setup DB connection
 	database = db.NewDatabase(configuration)
@@ -18,7 +19,7 @@ func init() {
 func main() {
 	// Initiate UP SQL Migrations
 	// If fail will execute down migrations then exit the application
-	// db.Migration()
+	db.Migration(&configuration, false)
 
 	// Setup Gin Route
 	r := setupRoutes()

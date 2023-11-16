@@ -2,7 +2,6 @@ package student_test
 
 import (
 	"app/model"
-	"app/pkg/log"
 	"fmt"
 	"testing"
 )
@@ -25,7 +24,6 @@ func TestCreateTemplate(t *testing.T) {
 
 func TestGetListTemplate(t *testing.T) {
 	students, _ := studenService.GetList()
-	log.PrintStruct(students)
 	if len(students) < 2 {
 		t.FailNow()
 	}

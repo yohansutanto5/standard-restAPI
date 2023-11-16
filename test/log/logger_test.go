@@ -1,7 +1,6 @@
 package testlogger
 
 import (
-	"app/constanta"
 	"app/pkg/log"
 	"testing"
 )
@@ -11,6 +10,6 @@ func TestMain(m *testing.M) {
 }
 
 func TestInfo(t *testing.T) {
-	log.Info(1, "dasda", constanta.StatusOK, constanta.CodeOK)
+	log.Debug(1, "dasda", nil)
 
 }

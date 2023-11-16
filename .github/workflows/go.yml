@@ -33,5 +33,6 @@ jobs:
         tags: |
           yohansutanto5/backend:latest
           yohansutanto5/backend:1.1.0
-        username: yohansutanto5
-        password: DE#2wsaq1
+      env:
+        DOCKER_USERNAME: yohansutanto5
+        DOCKER_PASSWORD: DE#2wsaq1

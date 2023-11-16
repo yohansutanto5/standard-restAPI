@@ -77,6 +77,12 @@ func Fatal(message string) {
 	}).Fatal()
 }
 
+func System(message string) {
+	log.WithFields(logrus.Fields{
+		"message": message,
+	}).Info()
+}
+
 func Warning(transactionID int, message string, data interface{}) {
 	log.WithFields(logrus.Fields{
 		"transactionID": transactionID,

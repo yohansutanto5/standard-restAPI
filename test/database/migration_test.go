@@ -10,16 +10,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func TestMigration(t *testing.T) {
-	db.Migration()
-}
-
 var dbg *gorm.DB
+var ds *db.DataStore
+var configs config.Configuration
 
 func TestMain(m *testing.M) {
-	configs := config.Load("dev")
+	configs = config.Load("test")
 	var err error
-	dbg, err = db.GormInit(configs)
+	ds = db.NewDatabase(configs)
+	dbg = ds.Db
 	if err != nil {
 		log.Fatal("asd")
 	} else {
@@ -27,20 +26,9 @@ func TestMain(m *testing.M) {
 	}
 
 }
-func TestGorm(t *testing.T) {
-	configs := config.Load("dev")
-	dbg, err := db.GormInit(configs)
-	if err != nil {
-		t.Fail()
-	}
-	err = dbg.AutoMigrate(&Product{})
-	if err != nil {
-		fmt.Println(err.Error())
-		t.FailNow()
-	}
-	dbg.Create(&Product{Code: "D42", Price: 100})
-	dbg.Create(&Product{Name: "D42123123123123123123", Price: 100})
 
+func TestMigration(t *testing.T) {
+	db.Migration(&configs)
 }
 
 type Product struct {
@@ -59,7 +47,7 @@ type Cart struct {
 }
 
 func TestGormRelation(t *testing.T) {
-	err := dbg.AutoMigrate(&Cart{}, &Product{})
+	err := ds.Db.AutoMigrate(&Cart{})
 	if err != nil {
 		fmt.Println(err.Error())
 		t.FailNow()

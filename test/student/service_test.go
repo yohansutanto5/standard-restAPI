@@ -8,7 +8,7 @@ import (
 )
 
 func TestMigrationTemplate(t *testing.T) {
-	err := dbg.AutoMigrate(&model.Student{})
+	err := database.Db.AutoMigrate(&model.Student{})
 	if err != nil {
 		fmt.Println(err.Error())
 		t.Failed()

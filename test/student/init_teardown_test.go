@@ -11,20 +11,17 @@ import (
 	"testing"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 // Create testing Contenxt
 var ctx *gin.Context
 var configuration config.Configuration
-var dbg *gorm.DB
 var database *db.DataStore
 var studenService service.StudentService
 
 func TestMain(m *testing.M) {
 	configuration = config.Load("dev")
 	var err error
-	dbg, err = db.GormInit(configuration)
 	database = db.NewDatabase(configuration)
 	studenService = service.NewStudentService(database)
 	if err != nil {

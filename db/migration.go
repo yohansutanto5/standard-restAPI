@@ -1,8 +1,9 @@
 package db
 
 import (
+	"app/cmd/config"
+	"app/pkg/log"
 	"fmt"
-	"log"
 
 	"github.com/golang-migrate/migrate"
 	_ "github.com/golang-migrate/migrate/database/postgres"
@@ -10,28 +11,31 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func Migration() {
+func Migration(config *config.Configuration) {
 	// Create a new migration instance
-	dbURL := "postgres://postgres@localhost:5432/app?sslmode=disable&search_path=app"
+	dbURL := fmt.Sprintf("postgress://%s:%s@%s:%s/%s?sslmode=disable&search_path=%s",
+		config.Db.Username, config.Db.Password, config.Db.Host, config.Db.Port, config.Db.Database, config.Db.Schema)
+
 	m, err := migrate.New(
 		"file://"+"/home/yohan/workspace/db/migration/",
 		dbURL,
 	)
 	if err != nil {
-		log.Fatalf("Failed to create migration instance: %v", err)
+		log.Fatal("Failed to create migration instance")
 	}
 
 	// Run the specified migration action
 	err = m.Up()
 
 	if err != nil && err != migrate.ErrNoChange {
-		log.Fatalf("Migration failed: %v", err)
+		log.Fatal("Migration failed")
 	}
 
 	// Get the current migration version
 	version, dirty, err := m.Version()
 	if err != nil {
-		log.Fatalf("Failed to get migration version: %v", err)
+		log.Fatal("Failed to get migration version")
 	}
-	fmt.Printf("Current migration version: %v (dirty: %v)\n", version, dirty)
+
+	log.System(fmt.Sprintf("Current migration version: %s (dirty: %s)\n", version, dirty))
 }

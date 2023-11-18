@@ -47,8 +47,8 @@ func NewDatabase(config config.Configuration) *DataStore {
 
 	_, err = redisClient.Ping().Result()
 	if err != nil {
-		log.Fatal("Failed to Initiate Redis Connection")
-		panic(err)
+		// log.Fatal("Failed to Initiate Redis Connection")
+		// panic(err)
 	}
 
 	// defer func() {

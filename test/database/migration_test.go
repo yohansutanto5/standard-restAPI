@@ -56,15 +56,16 @@ func TestMain(m *testing.M) {
 }
 
 func TestMigration(t *testing.T) {
-
+	// db.Migration(&configs, true)
 	db.Migration(&configs, false)
+	fmt.Println("asda")
 }
 
-func TestGormRelation(t *testing.T) {
-	err := ds.Db.AutoMigrate(model.Student{})
+func TestGormMigration(t *testing.T) {
+	err := ds.Db.AutoMigrate(model.UserProfile{}, model.User{}, model.Application{})
 	if err != nil {
 		fmt.Println(err.Error())
-		t.FailNow()
+		t.Fail()
 	}
 }
 

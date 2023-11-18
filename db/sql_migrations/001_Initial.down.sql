@@ -1,1 +1,5 @@
-drop TABLE users;
+
+DROP TABLE IF EXISTS user_profiles CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+DROP TABLE IF EXISTS applications CASCADE;

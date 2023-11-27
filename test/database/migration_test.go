@@ -62,7 +62,7 @@ func TestMigration(t *testing.T) {
 }
 
 func TestGormMigration(t *testing.T) {
-	err := ds.Db.AutoMigrate(model.UserProfile{}, model.User{}, model.Application{}, model.ReleaseTicket{}, model.Debt{})
+	err := ds.Db.AutoMigrate(model.UserProfile{}, model.User{})
 	// err := ds.Db.AutoMigrate(model.Debt{})
 
 	if err != nil {
@@ -70,20 +70,6 @@ func TestGormMigration(t *testing.T) {
 		t.Fail()
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 func TestGormRelationCreate(t *testing.T) {
 	res := dbg.Create(&Cart{

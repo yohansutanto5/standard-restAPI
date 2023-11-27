@@ -23,17 +23,12 @@ func main() {
 	// If fail will execute down migrations then exit the application
 	// db.Migration(&configuration, false)
 	if false {
-		err := database.Db.AutoMigrate(model.UserProfile{}, model.User{},
-			model.Application{}, model.ReleaseTicket{}, model.Debt{})
+		err := database.Db.AutoMigrate(model.UserProfile{}, model.User{})
 
 		if err != nil {
 			log.Fatal(err.Error())
 		}
 	}
-
-	// Start Listener Kafka
-	go startEventListener(configuration)
-
 	// Setup Gin Route
 	r := setupRoutes()
 	r.Run(":8078")

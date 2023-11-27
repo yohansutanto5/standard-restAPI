@@ -12,9 +12,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetStudent(c *gin.Context, student service.StudentService) {
+func GetUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
 	// To DO handle filter and search
-	result, err := student.GetList()
+	result, err := UserProfile.GetList()
 
 	if err != nil {
 		errorResponse := model.ErrorResponse{
@@ -29,52 +29,50 @@ func GetStudent(c *gin.Context, student service.StudentService) {
 	}
 }
 
-func DeleteStudent(c *gin.Context) {
+func DeleteUserProfile(c *gin.Context) {
 	dbService := db.GetContext(c)
 	// To do parsing data here
 	id := 1
-	var student = service.NewStudentService(dbService)
+	var UserProfile = service.NewUserProfileService(dbService)
 	// To DO handle filter and search
-	c.JSON(http.StatusOK, student.DeleteByID(id))
+	c.JSON(http.StatusOK, UserProfile.DeleteByID(id))
 }
 
-func AddStudent(c *gin.Context, student service.StudentService) {
+func InsertUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
 	// Cast data from request
-	var data model.AddStudentIn
+	var data model.AddUserProfileIn
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	// Construct Student Model with the request data
-	var newStudent model.Student
-	newStudent.FirstName = data.FirstName
-	newStudent.LastName = data.LastName
+	// Construct UserProfile Model with the request data
+	var newUserProfile model.UserProfile
+	newUserProfile.Name = data.Name
 
 	// Call create service
-	err := student.Create(&newStudent)
+	err := UserProfile.Insert(&newUserProfile)
 
 	// Construct Response
 	if err != nil {
 		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
-		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
+		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage+util.GetTransactionIDString(c))
 	} else {
 		c.JSON(http.StatusOK, constanta.SuccessMessage)
 	}
 }
 
-func UpdateStudent(c *gin.Context) {
+func UpdateUserProfile(c *gin.Context) {
 	dbService := db.GetContext(c)
-	var data model.AddStudentIn
+	var data model.AddUserProfileIn
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var student = service.NewStudentService(dbService)
-	var newStudent model.Student
-	newStudent.FirstName = data.FirstName
-	newStudent.LastName = data.LastName
+	var UserProfile = service.NewUserProfileService(dbService)
+	var newUserProfile model.UserProfile
+	newUserProfile.Name = data.Name
 
-	err := student.Update(&newStudent)
+	err := UserProfile.Update(&newUserProfile)
 	if err != nil {
 		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)

@@ -36,5 +36,14 @@
         "confluence": "https://example.com/confluence",
         "jenkins": "https://example.com/jenkins"
     },
-    "mode": 1
+    "dir" : {
+        "sql" : "/home/yohan/devsync/db/sql_migrations"
+    },
+    "mode": {
+        "mysql" :false,
+        "postgresql" :false,
+        "redis" : false,
+        "kafka" : true,
+        "run" : "debug"
+    }
 }

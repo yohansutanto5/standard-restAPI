@@ -1,4 +1,4 @@
-package student_test
+package application_test
 
 // import (
 // 	"app/internal/template"

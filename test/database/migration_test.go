@@ -43,7 +43,7 @@ type Language struct {
 }
 
 func TestMain(m *testing.M) {
-	configs = config.Load("test")
+	configs = config.Load("dev")
 	var err error
 	ds = db.NewDatabase(configs)
 	dbg = ds.Db
@@ -56,17 +56,34 @@ func TestMain(m *testing.M) {
 }
 
 func TestMigration(t *testing.T) {
-
+	// db.Migration(&configs, true)
 	db.Migration(&configs, false)
+	fmt.Println("asda")
 }
 
-func TestGormRelation(t *testing.T) {
-	err := ds.Db.AutoMigrate(model.Student{})
+func TestGormMigration(t *testing.T) {
+	err := ds.Db.AutoMigrate(model.UserProfile{}, model.User{}, model.Application{}, model.ReleaseTicket{}, model.Debt{})
+	// err := ds.Db.AutoMigrate(model.Debt{})
+
 	if err != nil {
 		fmt.Println(err.Error())
-		t.FailNow()
+		t.Fail()
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 func TestGormRelationCreate(t *testing.T) {
 	res := dbg.Create(&Cart{

@@ -8,6 +8,7 @@ import (
 type db struct {
 	Username    string `json:"username"`
 	Password    string `json:"password"`
+	Vendor      string `json:"vendor"`
 	Host        string `json:"host"`
 	Port        string `json:"port"`
 	Database    string `json:"database"`
@@ -20,6 +21,10 @@ type redis struct {
 	Address  string `json:"address"`
 	Password string `json:"password"`
 	DB       int    `json:"db"`
+}
+
+type dir struct {
+	Migration string `json:"sql"`
 }
 
 type cron struct {
@@ -45,6 +50,25 @@ type url struct {
 	Jenkins    string `json:"jenkins"`
 }
 
+type kafka struct {
+	Hostname      string `json:"hostname"`
+	User          string `json:"user"    `
+	Password      string `json:"password"`
+	Port          string `json:"port" `
+	AuthMethod    string `json:"authMethod"`
+	ConsumerGroup string `json:"consumerGroup"`
+	ApprovalTopic string `json:"approvalTopic"`
+}
+
+type mode struct {
+	Mysql      bool   `json:"mysql"`
+	Postgresql bool   `json:"postgresql"`
+	Redis      bool   `json:"redis"`
+	Kafka      bool   `json:"kafka"`
+	Slave      bool   `json:"slave"`
+	Run        string `json:"run"`
+}
+
 type Configuration struct {
 	Db      db      `json:"db"`
 	Dbslave dbslave `json:"dbslave"`
@@ -52,7 +76,9 @@ type Configuration struct {
 	URL     url     `json:"url"`
 	Redis   redis   `json:"redis"`
 	Cron    cron    `json:"cron"`
-	Mode    int     `json:"mode"`
+	Mode    mode    `json:"mode"`
+	Dir     dir
+	Kafka   kafka `json:"kafka"`
 }
 
 func Load(env string) Configuration {
@@ -61,11 +87,11 @@ func Load(env string) Configuration {
 
 	switch env {
 	case "dev":
-		configFile = "/home/yohan/standard-restAPI/cmd/config/config_dev.json"
+		configFile = os.Getenv("config") + "/config_dev.json"
 	case "prd":
-		configFile = "/home/yohan/workspace/cmd/config/config_prd.json"
+		configFile = os.Getenv("config")
 	case "test":
-		configFile = "/home/yohan/standard-restAPI/cmd/config/config_test.json"
+		configFile = os.Getenv("config") + "/config_test.json"
 	default:
 		panic("Input ENV")
 	}

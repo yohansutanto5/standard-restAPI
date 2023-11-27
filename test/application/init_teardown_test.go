@@ -1,4 +1,4 @@
-package student_test
+package application_test
 
 import (
 	"app/cmd/config"
@@ -17,15 +17,15 @@ import (
 var ctx *gin.Context
 var configuration config.Configuration
 var database *db.DataStore
-var studenService service.StudentService
+var applicationService service.ApplicationService
 
 func TestMain(m *testing.M) {
 	configuration = config.Load("dev")
 	var err error
 	database = db.NewDatabase(configuration)
-	studenService = service.NewStudentService(database)
+	applicationService = service.NewApplicationService(database)
 	if err != nil {
-		log.Fatal("asd")
+		log.Fatal("Can not initiate test")
 	} else {
 		// Create a mock HTTP request for testing
 		req, _ := http.NewRequest("GET", "/sample", nil)

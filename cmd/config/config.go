@@ -87,7 +87,7 @@ func Load(env string) Configuration {
 
 	switch env {
 	case "dev":
-		configFile = os.Getenv("config") + "/config_dev.json"
+		configFile = "/home/yohan/standard-restAPI/cmd/config" + "/config_dev.json"
 	case "prd":
 		configFile = os.Getenv("config")
 	case "test":

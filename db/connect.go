@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
@@ -21,7 +20,6 @@ type DataStore struct {
 	Db       *gorm.DB
 	DbView   *gorm.DB
 	Redis    *redis.Client
-	Producer *kafka.Producer
 	// add elasticsearch here
 }
 
@@ -42,20 +40,10 @@ func NewDatabase(config config.Configuration) *DataStore {
 		}
 	}
 
-	// Initiate Kafka Producer Connection
-	var producerClient *kafka.Producer
-	if config.Mode.Kafka {
-		producerClient, err = ConnectKafkaProducer(config)
-		if err != nil {
-			log.Fatal("Failed to Initiate Kafka Producer Connection : " + err.Error())
-			return nil
-		}
-	}
 
 	return &DataStore{
 		Db:       sqlConnection,
 		Redis:    redisClient,
-		Producer: producerClient,
 	}
 }
 
@@ -87,17 +75,6 @@ func ConnectRedis(config config.Configuration) (*redis.Client, error) {
 	return redisClient, err
 }
 
-func ConnectKafkaProducer(config config.Configuration) (*kafka.Producer, error) {
-
-	return kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": fmt.Sprintf("%s:%s", config.Kafka.Hostname, config.Kafka.Port),
-		"sasl.mechanisms":   config.Kafka.AuthMethod,
-		"security.protocol": "sasl_ssl",
-		"sasl.username":     config.Kafka.User,
-		"sasl.password":     config.Kafka.Password,
-	})
-
-}
 
 func ConnectPrimaryDatabase(config config.Configuration) *gorm.DB {
 	var sqlConnection *gorm.DB

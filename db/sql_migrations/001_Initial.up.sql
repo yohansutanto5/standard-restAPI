@@ -25,9 +25,14 @@ CREATE TABLE IF NOT EXISTS applications (
 	"name" text NULL,
 	category int8 NULL,
 	description text NULL,
+<<<<<<< HEAD
 	jenkins_directory text NULL,
 	created DATE NULL,
 	updated DATE NULL,
+=======
+	created timestamptz NULL,
+	updated timestamptz NULL,
+>>>>>>> 0f5ce3f649ba1ea0fd59146ab225ef8dd89ca725
 	owner_id int8 NULL,
 	lead_id int8 NULL,
 	CONSTRAINT applications_pkey PRIMARY KEY (id),

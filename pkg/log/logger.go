@@ -12,6 +12,11 @@ import (
 var log = logrus.New()
 
 func init() {
+	if os.Getenv("MODE") == "DEBUG" {
+		log.SetLevel(logrus.DebugLevel)
+	} else {
+		log.SetLevel(logrus.InfoLevel)
+	}
 	// Set log file name using the current date
 	logFileName := "../app-" + time.Now().Format("2006-01-02") + ".log"
 

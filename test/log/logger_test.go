@@ -10,6 +10,5 @@ func TestMain(m *testing.M) {
 }
 
 func TestInfo(t *testing.T) {
-	log.Debug(1, "dasda", nil)
-
+	log.Debug(1, "dasvvda", nil)
 }

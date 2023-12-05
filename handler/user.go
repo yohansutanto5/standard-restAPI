@@ -15,7 +15,6 @@ import (
 func GetUser(c *gin.Context, User service.UserService) {
 	// To DO handle filter and search
 	result, err := User.GetList()
-
 	if err != nil {
 		errorResponse := model.ErrorResponse{
 			TransactionID: util.GetTransactionID(c),
@@ -25,7 +24,10 @@ func GetUser(c *gin.Context, User service.UserService) {
 		}
 		c.JSON(http.StatusInternalServerError, errorResponse)
 	} else {
-		c.JSON(http.StatusOK, result)
+		// Construct DTO out
+		var response model.GetUserOut
+		util.ConvertStruct(result, response)
+		c.JSON(http.StatusOK, response)
 	}
 }
 
@@ -38,12 +40,8 @@ func InsertUser(c *gin.Context, User service.UserService) {
 	}
 	// Construct User Model with the request data
 	var newUser model.User
-	newUser.FirstName = data.FirstName
-	newUser.LastName = data.LastName
-	newUser.Active = true
-	newUser.Email = data.Email
-	newUser.Username = data.Username
-	newUser.ProfileID = data.Profile
+
+	util.ConvertStruct(data, newUser)
 
 	// Call create service
 	err := User.Insert(&newUser)

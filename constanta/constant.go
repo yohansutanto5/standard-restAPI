@@ -10,6 +10,7 @@ const (
 	DebugCode               = "APP-DBG"
 	DebugStatus             = 999
 	ErrorStatus             = 500
+	Warning                 = "APP-WARN"
 	FailToConnectCode       = "APP-CONN"
 	InternalServerErrorCode = "APP-SVR"
 	StatusOK                = 200

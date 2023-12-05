@@ -52,13 +52,17 @@ func DebugIssue(transactionID int, message string, mode string, data interface{}
 	}
 }
 
-func Error(transactionID int, message string, code string, data interface{}) {
+func Error(param model.CustomLog) {
 	log.WithFields(logrus.Fields{
-		"transactionID": transactionID,
-		"data":          data,
-		"status":        constanta.ErrorStatus,
-		"Code":          code,
-	}).Error(message)
+		"transactionID": param.TransactionID,
+		"status":        param.Status,
+		"Code":          param.Code,
+		"clientIp":      param.ClientIp,
+		"method":        param.Method,
+		"path":          param.Path,
+		"agent":         param.Agent,
+		"duration":      param.Duration,
+	}).Error(param.Message)
 }
 
 func Info(param model.CustomLog) {
@@ -87,6 +91,6 @@ func Warning(transactionID int, message string, data interface{}) {
 		"transactionID": transactionID,
 		"data":          data,
 		"status":        constanta.ErrorStatus,
-		"Code":          "code",
+		"Code":          constanta.Warning,
 	}).Warning(message)
 }

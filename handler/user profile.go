@@ -4,7 +4,6 @@ import (
 	"app/constanta"
 	"app/db"
 	"app/model"
-	"app/pkg/log"
 	"app/pkg/util"
 	"app/service"
 	"net/http"
@@ -54,7 +53,6 @@ func InsertUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
 
 	// Construct Response
 	if err != nil {
-		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage+util.GetTransactionIDString(c))
 	} else {
 		c.JSON(http.StatusOK, constanta.SuccessMessage)
@@ -74,7 +72,6 @@ func UpdateUserProfile(c *gin.Context) {
 
 	err := UserProfile.Update(&newUserProfile)
 	if err != nil {
-		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
 	}
 	c.JSON(http.StatusOK, constanta.SuccessMessage)

@@ -4,6 +4,7 @@ import (
 	"app/constanta"
 	"app/model"
 	"app/pkg/log"
+	"fmt"
 	"math/rand"
 	"time"
 
@@ -21,7 +22,7 @@ func middleware(c *gin.Context) {
 		if err := recover(); err != nil {
 			// Handle the error, log it, and send an appropriate response.
 			c.JSON(500, gin.H{"error": "Internal Server Error"})
-			// log.Error(fmt.Sprintf("%v", err))
+			log.Warning(transactionID, fmt.Sprintf("%v", err), "Recover from Panic")
 		}
 	}()
 
@@ -37,10 +38,14 @@ func middleware(c *gin.Context) {
 		TransactionID: transactionID,
 		Status:        c.Writer.Status(),
 		Duration:      time.Duration(time.Since(start).Milliseconds()),
-		Code:          constanta.CodeOK,
-		Message:       c.Errors.String(),
 	}
-	log.Info(responseLog)
+	if c.Writer.Status() < 204 {
+		responseLog.Code = constanta.CodeOK
+		log.Info(responseLog)
+	} else {
+		responseLog.Code = constanta.CodeErrorService
+		log.Error(responseLog)
+	}
 
 }
 

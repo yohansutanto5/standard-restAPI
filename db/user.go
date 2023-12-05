@@ -6,7 +6,7 @@ import (
 
 func (d *DataStore) GetListUser() ([]model.User, error) {
 	var Users []model.User
-	res := d.Db.Find(&Users)
+	res := d.Db.Preload("Profile").Find(&Users)
 	if res.Error != nil {
 		return nil, res.Error
 	}

@@ -17,9 +17,9 @@ import (
 )
 
 type DataStore struct {
-	Db       *gorm.DB
-	DbView   *gorm.DB
-	Redis    *redis.Client
+	Db     *gorm.DB
+	DbView *gorm.DB
+	Redis  *redis.Client
 	// add elasticsearch here
 }
 
@@ -40,25 +40,20 @@ func NewDatabase(config config.Configuration) *DataStore {
 		}
 	}
 
-
 	return &DataStore{
-		Db:       sqlConnection,
-		Redis:    redisClient,
+		Db:    sqlConnection,
+		Redis: redisClient,
 	}
 }
 
 func GetContext(c *gin.Context) *DataStore {
-	dbService, exists := c.Get("db")
-	if exists {
-		// Check if dbService is of the expected type
-		if db, ok := dbService.(*DataStore); ok {
-			return db
-		} else {
-			log.Error(util.GetTransactionID(c), "Failed to connect to DB", constanta.FailToConnectCode, nil)
-		}
+	dbService, _ := c.Get("db")
+
+	// Check if dbService is of the expected type
+	if db, ok := dbService.(*DataStore); ok {
+		return db
 	} else {
-		// Handle the case where the key "db" does not exist in the Gin context
-		log.Error(util.GetTransactionID(c), "Failed to connect to DB", constanta.FailToConnectCode, nil)
+		log.Warning(util.GetTransactionID(c), "Failed to connect to DB", constanta.FailToConnectCode)
 	}
 	return nil
 }
@@ -74,7 +69,6 @@ func ConnectRedis(config config.Configuration) (*redis.Client, error) {
 	_, err := redisClient.Ping().Result()
 	return redisClient, err
 }
-
 
 func ConnectPrimaryDatabase(config config.Configuration) *gorm.DB {
 	var sqlConnection *gorm.DB

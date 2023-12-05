@@ -4,7 +4,6 @@ import (
 	"app/constanta"
 	"app/db"
 	"app/model"
-	"app/pkg/log"
 	"app/pkg/util"
 	"app/service"
 	"net/http"
@@ -25,8 +24,10 @@ func GetUser(c *gin.Context, User service.UserService) {
 		c.JSON(http.StatusInternalServerError, errorResponse)
 	} else {
 		// Construct DTO out
-		var response model.GetUserOut
-		util.ConvertStruct(result, response)
+		var response []model.GetUserOut
+		for _, user := range result {
+			response = append(response, user.ConstructGetUserOut())
+		}
 		c.JSON(http.StatusOK, response)
 	}
 }
@@ -39,12 +40,10 @@ func InsertUser(c *gin.Context, User service.UserService) {
 		return
 	}
 	// Construct User Model with the request data
-	var newUser model.User
-
-	util.ConvertStruct(data, newUser)
-
+	newUser := &model.User{}
+	newUser.PopulateFromDTOInput(data)
 	// Call create service
-	err := User.Insert(&newUser)
+	err := User.Insert(newUser)
 
 	// Construct Response
 	if err != nil {
@@ -83,7 +82,6 @@ func UpdateUser(c *gin.Context) {
 
 	err := User.Update(&newUser)
 	if err != nil {
-		log.Error(util.GetTransactionID(c), err.Error(), constanta.InternalServerErrorCode, nil)
 		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
 	}
 	c.JSON(http.StatusOK, constanta.SuccessMessage)

@@ -44,3 +44,33 @@ func ConvertStruct(source interface{}, target interface{}) {
 		}
 	}
 }
+
+func ConvertStructToMap(obj interface{}, fieldsToInclude []string) map[string]interface{} {
+	result := make(map[string]interface{})
+
+	objValue := reflect.ValueOf(obj)
+	if objValue.Kind() != reflect.Struct {
+		return result
+	}
+
+	for i := 0; i < objValue.NumField(); i++ {
+		field := objValue.Type().Field(i)
+		fieldName := field.Tag.Get("convert")
+
+		if fieldName != "" && contains(fieldsToInclude, fieldName) {
+			fieldValue := objValue.Field(i).Interface()
+			result[fieldName] = fieldValue
+		}
+	}
+
+	return result
+}
+
+func contains(slice []string, value string) bool {
+	for _, v := range slice {
+		if v == value {
+			return true
+		}
+	}
+	return false
+}

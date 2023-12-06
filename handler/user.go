@@ -16,7 +16,7 @@ func GetUser(c *gin.Context, User service.UserService) {
 
 	// Construct Response
 	if err != nil {
-		err.GenerateReponse(util.GetTransactionID(c))
+		c.Errors = append(c.Errors, err.GenerateReponse(util.GetTransactionID(c)))
 		c.JSON(err.Status, err.Response)
 	} else {
 		// Construct DTO out
@@ -31,8 +31,8 @@ func GetUser(c *gin.Context, User service.UserService) {
 func InsertUser(c *gin.Context, User service.UserService) {
 	// Cast data from request
 	var data model.AddUserIn
-	if err := c.ShouldBindJSON(&data); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if errx := c.ShouldBindJSON(&data); errx != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": errx.Error()})
 		return
 	}
 	// Construct User Model with the request data
@@ -43,7 +43,7 @@ func InsertUser(c *gin.Context, User service.UserService) {
 
 	// Construct Response
 	if err != nil {
-		err.GenerateReponse(util.GetTransactionID(c))
+		c.Errors = append(c.Errors, err.GenerateReponse(util.GetTransactionID(c)))
 		c.JSON(err.Status, err.Response)
 	} else {
 		c.JSON(http.StatusCreated, constanta.SuccessMessage)
@@ -59,7 +59,7 @@ func DeleteUser(c *gin.Context, User service.UserService) {
 
 	// Construct Response
 	if err != nil {
-		err.GenerateReponse(util.GetTransactionID(c))
+		c.Errors = append(c.Errors, err.GenerateReponse(util.GetTransactionID(c)))
 		c.JSON(err.Status, err.Response)
 	} else {
 		c.JSON(http.StatusNoContent, constanta.SuccessMessage)
@@ -68,8 +68,8 @@ func DeleteUser(c *gin.Context, User service.UserService) {
 
 func UpdateUser(c *gin.Context, User service.UserService) {
 	var data model.AddUserIn
-	if err := c.ShouldBindJSON(&data); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if errx := c.ShouldBindJSON(&data); errx != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": errx.Error()})
 		return
 	}
 	// Construct User Model with the request data
@@ -81,7 +81,7 @@ func UpdateUser(c *gin.Context, User service.UserService) {
 
 	// Construct Response
 	if err != nil {
-		err.GenerateReponse(util.GetTransactionID(c))
+		c.Errors = append(c.Errors, err.GenerateReponse(util.GetTransactionID(c)))
 		c.JSON(err.Status, err.Response)
 	} else {
 		c.JSON(http.StatusCreated, constanta.SuccessMessage)

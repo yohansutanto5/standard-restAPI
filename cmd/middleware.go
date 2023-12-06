@@ -3,6 +3,7 @@ package main
 import (
 	"app/constanta"
 	"app/model"
+	"app/pkg/error"
 	"app/pkg/log"
 	"fmt"
 	"math/rand"
@@ -44,11 +45,11 @@ func middleware(c *gin.Context) {
 		responseLog.Message = constanta.SuccessMessage
 		log.Info(responseLog)
 	} else {
-		v, _ := c.Get("errorResponse")
-		errorResponse, _ := v.(error.Error)
-		responseLog.Code = errorResponse.Code
-		responseLog.Message = errorResponse.Message
-		responseLog.Data = errorResponse.Details
+		v := c.Errors.Last().Meta //gin errr
+		e, _ := v.(*error.Error)
+		responseLog.Code = e.Response.Code
+		responseLog.Message = e.Response.Message
+		responseLog.Data = e.Response.Details
 		log.Error(responseLog)
 	}
 

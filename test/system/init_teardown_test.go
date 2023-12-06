@@ -19,7 +19,7 @@ var database *db.DataStore
 var route *gin.Engine
 
 func TestMain(m *testing.M) {
-	configuration = config.Load("test")
+	configuration = config.Load("dev")
 	var err error
 	database = db.NewDatabase(configuration)
 	if err != nil {

@@ -4,7 +4,7 @@ import "time"
 
 type User struct {
 	ID        int         `gorm:"primaryKey;autoIncrement"`
-	Username  string      `gorm:"type:VARCHAR(20);not null;" convert:"Username"`
+	Username  string      `gorm:"type:VARCHAR(20);not null;unique" convert:"Username"`
 	FirstName string      `gorm:"type:VARCHAR(70);not null;" convert:"FirstName"`
 	LastName  string      `gorm:"type:VARCHAR(70)" convert:"LastName"`
 	Profile   UserProfile `gorm:"foreignKey:ProfileID" convert:"Profile"`

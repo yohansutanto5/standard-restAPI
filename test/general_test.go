@@ -1,10 +1,14 @@
 package test
 
 import (
+	newerr "app/pkg/error"
 	"app/pkg/util"
+	"errors"
 	"fmt"
 	"log"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 type SourceStruct struct {
@@ -47,7 +51,6 @@ func TestStructConverter(t *testing.T) {
 	log.Fatal(targetInstance)
 }
 
-
 func TestStructConverterToMap(t *testing.T) {
 	sourceInstance := SourceStruct{
 		SourceField1: 42,
@@ -57,7 +60,14 @@ func TestStructConverterToMap(t *testing.T) {
 			NestedField2: "Nested Hello!",
 		},
 	}
-	fieldsToInclude := []string {"TargetField1","TargetField2","NestedTargetStruct","NestedTargetField1"}
-	mapped := util.ConvertStructToMap(sourceInstance,fieldsToInclude)
+	fieldsToInclude := []string{"TargetField1", "TargetField2", "NestedTargetStruct", "NestedTargetField1"}
+	mapped := util.ConvertStructToMap(sourceInstance, fieldsToInclude)
 	log.Fatal(fmt.Printf("Target Struct: %+v\n", mapped))
+}
+
+func TestError(t *testing.T) {
+	var err *newerr.Error
+	e := errors.New("Error 1062 (23000): Duplicate entry 'abc567' for key 'users.username'")
+	err.ParseMysqlError(e)
+	assert.Equal(t, err.Status, 500)
 }

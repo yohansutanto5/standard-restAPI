@@ -2,7 +2,6 @@ package handler
 
 import (
 	"app/constanta"
-	"app/db"
 	"app/model"
 	"app/pkg/util"
 	"app/service"
@@ -12,16 +11,13 @@ import (
 )
 
 func GetUser(c *gin.Context, User service.UserService) {
-	// To DO handle filter and search
+	// Call Service
 	result, err := User.GetList()
+
+	// Construct Response
 	if err != nil {
-		errorResponse := model.ErrorResponse{
-			TransactionID: util.GetTransactionID(c),
-			Message:       constanta.InternalServerErrorMessage,
-			Code:          constanta.CodeErrorService,
-			Details:       err.Error(),
-		}
-		c.JSON(http.StatusInternalServerError, errorResponse)
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
 	} else {
 		// Construct DTO out
 		var response []model.GetUserOut
@@ -47,42 +43,47 @@ func InsertUser(c *gin.Context, User service.UserService) {
 
 	// Construct Response
 	if err != nil {
-		errorResponse := model.ErrorResponse{
-			TransactionID: util.GetTransactionID(c),
-			Message:       constanta.InternalServerErrorMessage,
-			Code:          constanta.CodeErrorService,
-			Details:       err.Error(),
-		}
-		c.JSON(http.StatusInternalServerError, errorResponse)
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
 	} else {
-		c.JSON(http.StatusOK, constanta.SuccessMessage)
+		c.JSON(http.StatusCreated, constanta.SuccessMessage)
 	}
 }
 
-func DeleteUser(c *gin.Context) {
-	dbService := db.GetContext(c)
+func DeleteUser(c *gin.Context, User service.UserService) {
 	// To do parsing data here
 	id := 1
-	var User = service.NewUserService(dbService)
-	// To DO handle filter and search
-	c.JSON(http.StatusOK, User.DeleteByID(id))
+
+	// Call service func
+	err := User.DeleteByID(id)
+
+	// Construct Response
+	if err != nil {
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
+	} else {
+		c.JSON(http.StatusNoContent, constanta.SuccessMessage)
+	}
 }
 
-func UpdateUser(c *gin.Context) {
-	dbService := db.GetContext(c)
+func UpdateUser(c *gin.Context, User service.UserService) {
 	var data model.AddUserIn
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var User = service.NewUserService(dbService)
-	var newUser model.User
-	newUser.FirstName = data.FirstName
-	newUser.LastName = data.LastName
+	// Construct User Model with the request data
+	newUser := &model.User{}
+	newUser.PopulateFromDTOInput(data)
 
-	err := User.Update(&newUser)
+	// Call Service
+	err := User.Update(newUser)
+
+	// Construct Response
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
+	} else {
+		c.JSON(http.StatusCreated, constanta.SuccessMessage)
 	}
-	c.JSON(http.StatusOK, constanta.SuccessMessage)
 }

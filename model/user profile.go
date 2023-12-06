@@ -10,3 +10,7 @@ type UserProfile struct {
 type AddUserProfileIn struct {
 	Name string `json:"Name" binding:"required"`
 }
+
+func (m *UserProfile) PopulateFromDTOInput(input AddUserProfileIn) {
+	m.Name = input.Name
+}

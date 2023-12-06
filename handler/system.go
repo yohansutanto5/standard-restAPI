@@ -1,9 +1,7 @@
 package handler
 
 import (
-	"app/constanta"
 	"app/db"
-	"app/model"
 	"app/pkg/log"
 	"app/pkg/util"
 	"net/http"
@@ -39,12 +37,5 @@ func GetSystemHealth(c *gin.Context, ds *db.DataStore) {
 		"database_secondary": database_secondary,
 	}
 
-	// c.JSON(http.StatusOK, result)
-	errorResponse := model.ErrorResponse{
-		TransactionID: util.GetTransactionID(c),
-		Message:       constanta.InternalServerErrorMessage,
-		Code:          constanta.CodeErrorService,
-		Details:       result,
-	}
-	c.JSON(http.StatusInternalServerError, errorResponse)
+	c.JSON(http.StatusOK, result)
 }

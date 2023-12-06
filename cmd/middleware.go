@@ -39,11 +39,16 @@ func middleware(c *gin.Context) {
 		Status:        c.Writer.Status(),
 		Duration:      time.Duration(time.Since(start).Milliseconds()),
 	}
-	if c.Writer.Status() < 204 {
+	if c.Writer.Status() <= 400 {
 		responseLog.Code = constanta.CodeOK
+		responseLog.Message = constanta.SuccessMessage
 		log.Info(responseLog)
 	} else {
-		responseLog.Code = constanta.CodeErrorService
+		v, _ := c.Get("errorResponse")
+		errorResponse, _ := v.(error.Error)
+		responseLog.Code = errorResponse.Code
+		responseLog.Message = errorResponse.Message
+		responseLog.Data = errorResponse.Details
 		log.Error(responseLog)
 	}
 

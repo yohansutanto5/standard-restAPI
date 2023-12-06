@@ -2,12 +2,7 @@ package model
 
 import "time"
 
-type ErrorResponse struct {
-	TransactionID int
-	Code          string
-	Message       string
-	Details       any
-}
+
 
 type CustomLog struct {
 	TransactionID int    `json:"transactionID"`

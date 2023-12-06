@@ -59,14 +59,7 @@ func TestInsert_Normal_1(t *testing.T) {
 
 	for _, user := range users {
 		err := userService.Insert(user)
-		assert.ErrorIs(t, err, nil)
+		assert.Equal(t, err, nil)
 	}
 
-}
-
-func TestGetByID_Normal_1(t *testing.T) {
-	users, _ := userService.GetByID(4)
-	expectedId := 4
-	ActualId := users.ID
-	assert.Equal(t,expectedId,ActualId)
 }

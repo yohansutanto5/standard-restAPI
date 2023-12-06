@@ -2,7 +2,6 @@ package handler
 
 import (
 	"app/constanta"
-	"app/db"
 	"app/model"
 	"app/pkg/util"
 	"app/service"
@@ -12,29 +11,16 @@ import (
 )
 
 func GetUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
-	// To DO handle filter and search
+	// Call Service
 	result, err := UserProfile.GetList()
 
+	// Construct Response
 	if err != nil {
-		errorResponse := model.ErrorResponse{
-			TransactionID: util.GetTransactionID(c),
-			Message:       constanta.InternalServerErrorMessage,
-			Code:          constanta.CodeErrorService,
-			Details:       err.Error(),
-		}
-		c.JSON(http.StatusInternalServerError, errorResponse)
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
 	} else {
 		c.JSON(http.StatusOK, result)
 	}
-}
-
-func DeleteUserProfile(c *gin.Context) {
-	dbService := db.GetContext(c)
-	// To do parsing data here
-	id := 1
-	var UserProfile = service.NewUserProfileService(dbService)
-	// To DO handle filter and search
-	c.JSON(http.StatusOK, UserProfile.DeleteByID(id))
 }
 
 func InsertUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
@@ -45,34 +31,54 @@ func InsertUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
 		return
 	}
 	// Construct UserProfile Model with the request data
-	var newUserProfile model.UserProfile
-	newUserProfile.Name = data.Name
-
+	newUserProfile := &model.UserProfile{}
+	newUserProfile.PopulateFromDTOInput(data)
 	// Call create service
-	err := UserProfile.Insert(&newUserProfile)
+	err := UserProfile.Insert(newUserProfile)
 
 	// Construct Response
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage+util.GetTransactionIDString(c))
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
 	} else {
-		c.JSON(http.StatusOK, constanta.SuccessMessage)
+		c.JSON(http.StatusCreated, constanta.SuccessMessage)
 	}
 }
 
-func UpdateUserProfile(c *gin.Context) {
-	dbService := db.GetContext(c)
+func DeleteUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
+	// To do parsing data here
+	id := 1
+
+	// Call service func
+	err := UserProfile.DeleteByID(id)
+
+	// Construct Response
+	if err != nil {
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
+	} else {
+		c.JSON(http.StatusNoContent, constanta.SuccessMessage)
+	}
+}
+
+func UpdateUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
 	var data model.AddUserProfileIn
 	if err := c.ShouldBindJSON(&data); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	var UserProfile = service.NewUserProfileService(dbService)
-	var newUserProfile model.UserProfile
-	newUserProfile.Name = data.Name
+	// Construct UserProfile Model with the request data
+	newUserProfile := &model.UserProfile{}
+	newUserProfile.PopulateFromDTOInput(data)
 
-	err := UserProfile.Update(&newUserProfile)
+	// Call Service
+	err := UserProfile.Update(newUserProfile)
+
+	// Construct Response
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, constanta.InternalServerErrorMessage)
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
+	} else {
+		c.JSON(http.StatusCreated, constanta.SuccessMessage)
 	}
-	c.JSON(http.StatusOK, constanta.SuccessMessage)
 }

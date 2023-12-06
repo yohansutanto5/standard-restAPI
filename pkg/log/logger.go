@@ -41,17 +41,6 @@ func Debug(transactionID int, message string, data interface{}) {
 	}).Debug(message)
 }
 
-func DebugIssue(transactionID int, message string, mode string, data interface{}) {
-	if mode == "debug" {
-		log.WithFields(logrus.Fields{
-			"transactionID": transactionID,
-			"data":          data,
-			"status":        constanta.DebugStatus,
-			"Code":          constanta.DebugCode,
-		}).Debug(message)
-	}
-}
-
 func Error(param model.CustomLog) {
 	log.WithFields(logrus.Fields{
 		"transactionID": param.TransactionID,

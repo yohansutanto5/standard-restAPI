@@ -2,34 +2,29 @@ package db
 
 import (
 	"app/model"
+	"app/pkg/error"
 )
 
-func (d *DataStore) GetListUser() ([]model.User, error) {
-	var Users []model.User
-	res := d.Db.Preload("Profile").Find(&Users)
-	if res.Error != nil {
-		return nil, res.Error
-	}
-	return Users, nil
+func (d *DataStore) GetListUser() (Users []model.User, err *error.Error) {
+	e := d.Db.Preload("Profile").Find(&Users).Error
+	err.ParseMysqlError(e)
+	return
 }
 
-func (d *DataStore) InsertUser(User *model.User) error {
-	return d.Db.Create(User).Error
+func (d *DataStore) InsertUser(User *model.User) (err *error.Error) {
+	e := d.Db.Create(User).Error
+	err.ParseMysqlError(e)
+	return
 }
 
-func (d *DataStore) DeleteUserByID(id int) error {
-	err := d.Db.Where("id = ?", id).Delete(&model.User{}).Error
-	if err != nil {
-		return err
-	} else {
-		return nil
-	}
+func (d *DataStore) DeleteUserByID(id int) (err *error.Error) {
+	e := d.Db.Where("id = ?", id).Delete(&model.User{}).Error
+	err.ParseMysqlError(e)
+	return
 }
 
-func (d *DataStore) UpdateUser(User *model.User) error {
-	err := d.Db.Save(&User).Error
-	if err != nil {
-		return err
-	}
-	return nil
+func (d *DataStore) UpdateUser(User *model.User) (err *error.Error) {
+	e := d.Db.Save(&User).Error
+	err.ParseMysqlError(e)
+	return
 }

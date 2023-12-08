@@ -81,17 +81,17 @@ type Configuration struct {
 	Kafka   kafka `json:"kafka"`
 }
 
-func Load(env string) Configuration {
+func Load(env, dir string) Configuration {
 
 	var configFile string
 
 	switch env {
-	case "dev":
-		configFile = "/home/yohan/standard-restAPI/cmd/config" + "/config_dev.json"
-	case "prd":
-		configFile = os.Getenv("config") + "/config_prd.json"
+	case "debug":
+		configFile = dir + "/config_dev.json"
+	case "release":
+		configFile = dir + "/config_prd.json"
 	case "test":
-		configFile = os.Getenv("config") + "/config_test.json"
+		configFile = dir + "/config_test.json"
 	default:
 		panic("Please Input ENV")
 	}

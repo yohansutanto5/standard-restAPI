@@ -1,8 +1,8 @@
 {
     "db": {
-        "username": "devsync",
-        "password": "DE#2wsaq1",
-        "host": "db4free.net",
+        "username": "root",
+        "password": "Satu@111",
+        "host": "43.156.36.211",
         "port": "3306",
         "database": "devsync",
         "max_open_conn": 3,

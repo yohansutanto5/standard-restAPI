@@ -5,6 +5,7 @@ import (
 	"app/db"
 	"app/model"
 	"app/pkg/log"
+	"os"
 )
 
 var database *db.DataStore
@@ -12,8 +13,10 @@ var configuration config.Configuration
 
 func init() {
 	// setup Configuration
-	configuration = config.Load("dev")
-	log.System("Loaded Configuration Environment DEV")
+	mode := os.Getenv("GIN_MODE")
+	configfolder := os.Getenv("config")
+	configuration = config.Load(mode, configfolder)
+	log.System("Loaded Configuration Environment:" + mode + " from :" + configfolder)
 	// setup DB connection
 	database = db.NewDatabase(configuration)
 	log.System("Connection to Database is Established")
@@ -23,7 +26,7 @@ func main() {
 	// Initiate UP SQL Migrations
 	// If fail will execute down migrations then exit the application
 	// db.Migration(&configuration, false)
-	if false {
+	if true {
 		log.System("SQL Migration is Starting")
 		err := database.Db.AutoMigrate(model.UserProfile{}, model.User{})
 		if err != nil {

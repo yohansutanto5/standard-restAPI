@@ -1,7 +1,6 @@
 package log
 
 import (
-	"app/constanta"
 	"app/model"
 	"os"
 	"time"
@@ -36,8 +35,6 @@ func Debug(transactionID int, message string, data interface{}) {
 	log.WithFields(logrus.Fields{
 		"transactionID": transactionID,
 		"data":          data,
-		"status":        constanta.DebugStatus,
-		"Code":          constanta.DebugCode,
 	}).Debug(message)
 }
 
@@ -79,7 +76,5 @@ func Warning(transactionID int, message string, data interface{}) {
 	log.WithFields(logrus.Fields{
 		"transactionID": transactionID,
 		"data":          data,
-		"status":        constanta.ErrorStatus,
-		"Code":          constanta.Warning,
 	}).Warning(message)
 }

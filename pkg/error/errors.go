@@ -93,7 +93,7 @@ func (e *Error) ParseMysqlError(err error) {
 		e.Code = "APP-DB-" + match[1]
 	}
 	// handle the HTTP status
-	switch match[1] {
+	switch e.Code {
 	// Duplicate Entry
 	case CodeErrorDBDuplicate:
 		e.Status = http.StatusConflict

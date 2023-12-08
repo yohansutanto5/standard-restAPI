@@ -6,6 +6,7 @@ import (
 	"app/model"
 	"fmt"
 	"log"
+	"os"
 	"testing"
 
 	"gorm.io/gorm"
@@ -43,7 +44,9 @@ type Language struct {
 }
 
 func TestMain(m *testing.M) {
-	configs = config.Load("dev")
+	mode := os.Getenv("GIN_MODE")
+	configfolder := os.Getenv("config")
+	configs = config.Load(mode, configfolder)
 	var err error
 	ds = db.NewDatabase(configs)
 	dbg = ds.Db

@@ -19,7 +19,9 @@ var database *db.DataStore
 var route *gin.Engine
 
 func TestMain(m *testing.M) {
-	configuration = config.Load("dev")
+	mode := os.Getenv("GIN_MODE")
+	configfolder := os.Getenv("config")
+	configuration = config.Load(mode, configfolder)
 	var err error
 	database = db.NewDatabase(configuration)
 	if err != nil {

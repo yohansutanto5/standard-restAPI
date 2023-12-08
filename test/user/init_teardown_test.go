@@ -21,7 +21,9 @@ var userService service.UserService
 var userHandler handler.UserHandler
 
 func TestMain(m *testing.M) {
-	configuration = config.Load("dev")
+	mode := os.Getenv("GIN_MODE")
+	configfolder := os.Getenv("config")
+	configuration = config.Load(mode, configfolder)
 	database = db.NewDatabase(configuration)
 	userService = service.NewUserService(database)
 	userHandler = handler.NewUserHandler(database)

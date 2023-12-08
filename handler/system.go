@@ -17,24 +17,34 @@ type CRUDHandler interface {
 	Update(c *gin.Context)
 }
 
-func GetSystemHealth(c *gin.Context, ds *db.DataStore) {
+type SystemHandler struct {
+	ds *db.DataStore
+}
+
+func NewSystemHandler(ds *db.DataStore) SystemHandler {
+	return SystemHandler{
+		ds: ds,
+	}
+}
+
+func (h *SystemHandler) GetSystemHealth(c *gin.Context) {
 	// Variable
 	var redis bool = true
 	var database_primary bool = true
 	var database_secondary bool = true
 
-	redis = ds.Redis != nil && func() bool {
-		_, err := ds.Redis.Ping().Result()
+	redis = h.ds.Redis != nil && func() bool {
+		_, err := h.ds.Redis.Ping().Result()
 		return err == nil
 	}()
 
-	database_secondary = ds.Db != nil && func() bool {
-		sqlDB, err := ds.Db.DB()
+	database_secondary = h.ds.Db != nil && func() bool {
+		sqlDB, err := h.ds.Db.DB()
 		return err == nil && sqlDB.Ping() == nil
 	}()
 
-	database_primary = ds.Db != nil && func() bool {
-		sqlDB, err := ds.Db.DB()
+	database_primary = h.ds.Db != nil && func() bool {
+		sqlDB, err := h.ds.Db.DB()
 		return err == nil && sqlDB.Ping() == nil
 	}()
 

@@ -13,7 +13,8 @@ import (
 
 func TestGetSystemHealth(t *testing.T) {
 
-	handler.GetSystemHealth(ctx, database)
+	h := handler.NewSystemHandler(database)
+	h.GetSystemHealth(ctx)
 	assert.Equal(t, ctx.Writer.Status(), 200)
 }
 

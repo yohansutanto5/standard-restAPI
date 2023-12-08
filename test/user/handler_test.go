@@ -1,31 +1,27 @@
 package user_test
 
-// import (
-// 	"app/internal/template"
-// 	"app/pkg/util"
-// 	"testing"
-// )
+import (
+	"app/model"
+	"app/pkg/util"
+	"testing"
 
-// func TestGetListStudent(t *testing.T) {
-// 	template.GetStudent(ctx, dbg)
-// 	if ctx.Writer.Status() != 200 {
-// 		t.Fail()
-// 	}
-// }
+	"github.com/stretchr/testify/assert"
+)
 
-// func TestDeleteStudent(t *testing.T) {
-// 	template.DeleteStudent(ctx, 2, dbg)
-// 	if ctx.Writer.Status() != 200 {
-// 		t.Fail()
-// 	}
-// }
+func TestGetList(t *testing.T) {
+	userHandler.GetList(ctx)
+	assert.Equal(t, 200, ctx.Writer.Status())
+}
 
-// func TestCreateStudent(t *testing.T) {
-// 	var data template.AddStudentIn
-// 	data.FirstName = util.GenerateRandomString(5)
-// 	data.LastName = util.GenerateRandomString(4)
-// 	template.AddStudent(ctx, data, dbg)
-// 	if ctx.Writer.Status() != 200 {
-// 		t.Fail()
-// 	}
-// }
+func TestInsert(t *testing.T) {
+	// Instantiate test data
+	var data model.AddUserIn
+	data.FirstName = util.GenerateRandomString(5)
+	data.LastName = util.GenerateRandomString(4)
+
+	// Inject test data to request context
+
+	// Test the handler
+	userHandler.Insert(ctx)
+	assert.Equal(t, 200, ctx.Writer.Status())
+}

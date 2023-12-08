@@ -2,13 +2,10 @@ package db
 
 import (
 	"app/cmd/config"
-	"app/constanta"
 	"app/pkg/log"
-	"app/pkg/util"
 	"fmt"
 	"time"
 
-	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis"
 	_ "github.com/lib/pq"
 	"gorm.io/driver/mysql"
@@ -44,18 +41,6 @@ func NewDatabase(config config.Configuration) *DataStore {
 		Db:    sqlConnection,
 		Redis: redisClient,
 	}
-}
-
-func GetContext(c *gin.Context) *DataStore {
-	dbService, _ := c.Get("db")
-
-	// Check if dbService is of the expected type
-	if db, ok := dbService.(*DataStore); ok {
-		return db
-	} else {
-		log.Warning(util.GetTransactionID(c), "Failed to connect to DB", constanta.FailToConnectCode)
-	}
-	return nil
 }
 
 func ConnectRedis(config config.Configuration) (*redis.Client, error) {

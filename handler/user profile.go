@@ -2,6 +2,7 @@ package handler
 
 import (
 	"app/constanta"
+	"app/db"
 	"app/model"
 	"app/pkg/util"
 	"app/service"
@@ -10,9 +11,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
+type UserProfileHandler struct {
+	CRUDHandler
+	userProfileService service.UserProfileService
+}
+
+func NewUserProfileHandler(db *db.DataStore) UserProfileHandler {
+	svc := service.NewUserProfileService(db)
+	h := UserProfileHandler{
+		userProfileService: svc,
+	}
+	return h
+}
+
+func (h *UserProfileHandler) GetList(c *gin.Context) {
 	// Call Service
-	result, err := UserProfile.GetList()
+	result, err := h.userProfileService.GetList()
 
 	// Construct Response
 	if err != nil {
@@ -23,7 +37,7 @@ func GetUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
 	}
 }
 
-func InsertUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
+func (h *UserProfileHandler) Insert(c *gin.Context) {
 	// Cast data from request
 	var data model.AddUserProfileIn
 	if err := c.ShouldBindJSON(&data); err != nil {
@@ -34,7 +48,7 @@ func InsertUserProfile(c *gin.Context, UserProfile service.UserProfileService) {
 	newUserProfile := &model.UserProfile{}
 	newUserProfile.PopulateFromDTOInput(data)
 	// Call create service
-	err := UserProfile.Insert(newUserProfile)
+	err := h.userProfileService.Insert(newUserProfile)
 
 	// Construct Response
 	if err != nil {

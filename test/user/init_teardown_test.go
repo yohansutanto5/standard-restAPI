@@ -3,8 +3,8 @@ package user_test
 import (
 	"app/cmd/config"
 	"app/db"
+	"app/handler"
 	"app/service"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -18,25 +18,24 @@ var ctx *gin.Context
 var configuration config.Configuration
 var database *db.DataStore
 var userService service.UserService
+var userHandler handler.UserHandler
 
 func TestMain(m *testing.M) {
-	configuration = config.Load("test")
-	var err error
+	configuration = config.Load("dev")
 	database = db.NewDatabase(configuration)
 	userService = service.NewUserService(database)
-	if err != nil {
-		log.Fatal("Can not initiate test")
-	} else {
-		// Create a mock HTTP request for testing
-		req, _ := http.NewRequest("GET", "/sample", nil)
-		w := httptest.NewRecorder()
-		ctx, _ = gin.CreateTestContext(w)
-		ctx.Request = req
-		// Run tests
-		exitCode := m.Run()
+	userHandler = handler.NewUserHandler(database)
 
-		// Cleanup resources, close the database connection, etc.
+	// Create a mock HTTP request for testing
+	req, _ := http.NewRequest("GET", "/mockurl", nil)
+	w := httptest.NewRecorder()
+	ctx, _ = gin.CreateTestContext(w)
+	ctx.Request = req
+	// Run tests
+	exitCode := m.Run()
 
-		os.Exit(exitCode)
-	}
+	// Cleanup resources, close the database connection, etc.
+
+	os.Exit(exitCode)
+
 }

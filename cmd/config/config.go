@@ -89,11 +89,11 @@ func Load(env string) Configuration {
 	case "dev":
 		configFile = "/home/yohan/standard-restAPI/cmd/config" + "/config_dev.json"
 	case "prd":
-		configFile = os.Getenv("config")
+		configFile = os.Getenv("config") + "/config_prd.json"
 	case "test":
 		configFile = os.Getenv("config") + "/config_test.json"
 	default:
-		panic("Input ENV")
+		panic("Please Input ENV")
 	}
 
 	file, err := os.Open(configFile)

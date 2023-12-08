@@ -4,6 +4,10 @@ import (
 	"app/model"
 )
 
+type UserRepository struct{
+	
+}
+
 func (d *DataStore) GetListUser() (Users []model.User, err error) {
 	err = d.Db.Preload("Profile").Find(&Users).Error
 	return

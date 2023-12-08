@@ -12,9 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Group using gin.BasicAuth() middleware
-// gin.Accounts is a shortcut for map[string]string
-
 func middleware(c *gin.Context) {
 	transactionID := generateTransactionID()
 	c.Set("transactionID", transactionID)
@@ -45,7 +42,7 @@ func middleware(c *gin.Context) {
 		responseLog.Message = constanta.SuccessMessage
 		log.Info(responseLog)
 	} else {
-		v := c.Errors.Last().Meta //gin errr
+		v := c.Errors.Last().Meta //gin err
 		e, _ := v.(*error.Error)
 		responseLog.Code = e.Response.Code
 		responseLog.Message = e.Response.Message

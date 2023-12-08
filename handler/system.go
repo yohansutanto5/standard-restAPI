@@ -9,6 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type CRUDHandler interface {
+	GetList(c *gin.Context)
+	Get(c *gin.Context)
+	Insert(c *gin.Context)
+	Delete(c *gin.Context)
+	Update(c *gin.Context)
+}
+
 func GetSystemHealth(c *gin.Context, ds *db.DataStore) {
 	// Variable
 	var redis bool = true

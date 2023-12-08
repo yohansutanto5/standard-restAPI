@@ -38,18 +38,18 @@ func setupRoutes() *gin.Engine {
 	})
 
 	// Initiate all services and dependency
-	userService := service.NewUserService(database)
+	userHandler := handler.NewUserHandler(database)
 	UserProfileService := service.NewUserProfileService(database)
 	// Define The route Path
 	// System API
 	r.GET("/health", func(c *gin.Context) { handler.GetSystemHealth(c, database) })
 
 	// Post Method
-	r.POST("/user", func(c *gin.Context) { handler.InsertUser(c, userService) })
+	r.POST("/user", userHandler.Insert)
 	r.POST("/userprofile", func(c *gin.Context) { handler.InsertUserProfile(c, UserProfileService) })
 
 	// Get Method
-	r.GET("/user", func(c *gin.Context) { handler.GetUser(c, userService) })
+	r.GET("/user", userHandler.GetList)
 	r.GET("/userprofile", func(c *gin.Context) { handler.GetUserProfile(c, UserProfileService) })
 
 	return r

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"app/constanta"
+	"app/db"
 	"app/model"
 	"app/pkg/util"
 	"app/service"
@@ -10,9 +11,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func GetUser(c *gin.Context, User service.UserService) {
+type UserHandler struct {
+	CRUDHandler
+	userService service.UserService
+}
+
+func NewUserHandler(db *db.DataStore) UserHandler {
+	svc := service.NewUserService(db)
+	h := UserHandler{
+		userService: svc,
+	}
+	return h
+}
+
+func (h *UserHandler) GetList(c *gin.Context) {
 	// Call Service
-	result, err := User.GetList()
+	result, err := h.userService.GetList()
 
 	// Construct Response
 	if err != nil {
@@ -28,7 +42,7 @@ func GetUser(c *gin.Context, User service.UserService) {
 	}
 }
 
-func InsertUser(c *gin.Context, User service.UserService) {
+func (h *UserHandler) Insert(c *gin.Context) {
 	// Cast data from request
 	var data model.AddUserIn
 	if errx := c.ShouldBindJSON(&data); errx != nil {
@@ -39,45 +53,7 @@ func InsertUser(c *gin.Context, User service.UserService) {
 	newUser := &model.User{}
 	newUser.PopulateFromDTOInput(data)
 	// Call create service
-	err := User.Insert(newUser)
-
-	// Construct Response
-	if err != nil {
-		c.Errors = append(c.Errors, err.GenerateReponse(util.GetTransactionID(c)))
-		c.JSON(err.Status, err.Response)
-	} else {
-		c.JSON(http.StatusCreated, constanta.SuccessMessage)
-	}
-}
-
-func DeleteUser(c *gin.Context, User service.UserService) {
-	// To do parsing data here
-	id := 1
-
-	// Call service func
-	err := User.DeleteByID(id)
-
-	// Construct Response
-	if err != nil {
-		c.Errors = append(c.Errors, err.GenerateReponse(util.GetTransactionID(c)))
-		c.JSON(err.Status, err.Response)
-	} else {
-		c.JSON(http.StatusNoContent, constanta.SuccessMessage)
-	}
-}
-
-func UpdateUser(c *gin.Context, User service.UserService) {
-	var data model.AddUserIn
-	if errx := c.ShouldBindJSON(&data); errx != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": errx.Error()})
-		return
-	}
-	// Construct User Model with the request data
-	newUser := &model.User{}
-	newUser.PopulateFromDTOInput(data)
-
-	// Call Service
-	err := User.Update(newUser)
+	err := h.userService.Insert(newUser)
 
 	// Construct Response
 	if err != nil {

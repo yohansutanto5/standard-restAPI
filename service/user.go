@@ -9,8 +9,6 @@ import (
 // UserService defines the interface for managing Users.
 type UserService interface {
 	Insert(User *model.User) *error.Error
-	Update(data *model.User) *error.Error
-	DeleteByID(id int) *error.Error
 	GetList() ([]model.User, *error.Error)
 }
 
@@ -23,17 +21,23 @@ func NewUserService(db *db.DataStore) UserService {
 }
 
 func (s UserServiceImpl) GetList() ([]model.User, *error.Error) {
-	return s.db.GetListUser()
-}
+	err := &error.Error{}
+	result, e := s.db.GetListUser()
+	if e != nil {
+		err.ParseMysqlError(e)
+		return nil, err
+	} else {
+		return result, nil
+	}
 
-func (s *UserServiceImpl) DeleteByID(id int) *error.Error {
-	return s.db.DeleteUserByID(id)
-}
-
-func (s *UserServiceImpl) Update(data *model.User) *error.Error {
-	return s.db.UpdateUser(data)
 }
 
 func (s *UserServiceImpl) Insert(User *model.User) *error.Error {
-	return s.db.InsertUser(User)
+	err := &error.Error{}
+	e := s.db.InsertUser(User)
+	if e != nil {
+		err.ParseMysqlError(e)
+		return err
+	}
+	return nil
 }

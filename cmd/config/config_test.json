@@ -1,13 +1,13 @@
 {
     "db": {
-        "username": "ndzjkkdd",
-        "password": "rPv-OW78XpnXRrhtNDjNJlLUOumsmhnJ",
-        "host": "floppy.db.elephantsql.com",
-        "port": "5432",
-        "database": "ndzjkkdd",
-        "schema": "public",
+        "username": "superuser",
+        "password": "Satu!111",
+        "host": "43.156.36.211",
+        "port": "3306",
+        "database": "devsync",
         "max_open_conn": 3,
-        "max_idle_conn": 2
+        "max_idle_conn": 2,
+        "vendor" : "mysql"
     },
     "dbslave": {
         "username": "dbslave_username",
@@ -37,13 +37,23 @@
         "jenkins": "https://example.com/jenkins"
     },
     "dir" : {
-        "sql" : "/home/yohan/devsync/db/sql_migrations"
+        "sql" : "../db/sql_migrations/"
+    },
+    "kafka" : {
+        "hostname"        : "dory.srvs.cloudkafka.com",
+        "user"            : "tujddgkn",
+        "password"        : "Vif57S7286iadOQyFRqYX8clYdOxq0Xv",
+        "port"            : "9094",
+        "authMethod"      : "SCRAM-SHA-512",
+        "consumerGroup"   : "tujddgkn-default",
+        "approvalTopic"   : "tujddgkn-default"
     },
     "mode": {
         "mysql" :false,
         "postgresql" :false,
+        "slave":false,
         "redis" : false,
-        "kafka" : true,
+        "kafka" : false,
         "run" : "debug"
     }
 }

@@ -8,11 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetList_Normal_1(t *testing.T) {
-	users, _ := userService.GetList()
-	fmt.Println(len(users))
-	assert.Greater(t, len(users), 2)
-}
+
 func TestInsert_Normal_1(t *testing.T) {
 	users := []*model.User{
 		{
@@ -59,7 +55,13 @@ func TestInsert_Normal_1(t *testing.T) {
 
 	for _, user := range users {
 		err := userService.Insert(user)
-		assert.Equal(t, err, nil)
+		assert.Nil(t, err)
 	}
 
+}
+
+func TestGetList_Normal_1(t *testing.T) {
+	users, _ := userService.GetList()
+	fmt.Println(len(users))
+	assert.Greater(t, len(users), 2)
 }

@@ -4,7 +4,9 @@ import (
 	"app/cmd/config"
 	"app/db"
 	"app/handler"
+	"app/model"
 	"app/service"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -33,11 +35,23 @@ func TestMain(m *testing.M) {
 	w := httptest.NewRecorder()
 	ctx, _ = gin.CreateTestContext(w)
 	ctx.Request = req
+
+	// Input Init data
+	profile := model.UserProfile{
+		Name: "admin",
+	}
+	database.Db.Create(&profile)
 	// Run tests
 	exitCode := m.Run()
 
 	// Cleanup resources, close the database connection, etc.
+	if err := database.Db.Exec("TRUNCATE TABLE users;").Error; err != nil {
+		panic(fmt.Sprintf("Failed to truncate table: %v", err))
+	}
 
+	if err := database.Db.Exec("ALTER TABLE users AUTO_INCREMENT = 1;").Error; err != nil {
+		panic(fmt.Sprintf("Failed to reset auto-increment sequence: %v", err))
+	}
 	os.Exit(exitCode)
 
 }

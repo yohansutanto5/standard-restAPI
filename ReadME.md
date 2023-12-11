@@ -20,11 +20,11 @@
     - Modular loosely coupled design
     - Rest API back end service (GIN Framerwork)
     - Event Driven Architecture (Kafka)
-    - SQL Database as main datastore (Postgresql)
+    - SQL Database as main datastore (Mysql)
     - NoSQL Datase as cache and search (Redis,Elasticsearch)
     - CI (Github action)
     - CD (AWS EKS)
-    - Project management (JIRA)
+    - Project management (DevSync)
     - Logging (Logrus & EFK stack & Docker driver)
     - Database Migration (golang-migrate with rollback mechanism)
     - Application Configuration (JSON file + Env Variable)

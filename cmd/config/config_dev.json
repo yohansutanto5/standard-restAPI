@@ -1,7 +1,7 @@
 {
     "db": {
-        "username": "root",
-        "password": "Satu@111",
+        "username": "superuser",
+        "password": "Satu!111",
         "host": "43.156.36.211",
         "port": "3306",
         "database": "devsync",
@@ -37,7 +37,7 @@
         "jenkins": "https://example.com/jenkins"
     },
     "dir" : {
-        "sql" : "/home/yohan/devsync/db/sql_migrations"
+        "sql" : "/home/yohan/standard-restAPI/db/sql_migrations/"
     },
     "kafka" : {
         "hostname"        : "dory.srvs.cloudkafka.com",

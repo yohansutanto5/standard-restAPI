@@ -2,6 +2,7 @@ package log
 
 import (
 	"app/model"
+	"io"
 	"os"
 	"time"
 
@@ -24,11 +25,14 @@ func init() {
 	if err == nil {
 		log.Out = logFile
 	} else {
+		log.SetOutput(os.Stdout)
 		log.Info("Failed to log to file, using default stderr")
+		return
 	}
 
 	// Configure logrus to produce JSON logs
 	log.SetFormatter(&logrus.JSONFormatter{})
+	log.SetOutput(io.MultiWriter(os.Stdout, log.Out))
 }
 
 func Debug(transactionID int, message string, data interface{}) {

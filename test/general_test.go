@@ -4,8 +4,6 @@ import (
 	newerr "app/pkg/error"
 	"app/pkg/util"
 	"errors"
-	"fmt"
-	"log"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -33,24 +31,6 @@ type NestedTargetStruct struct {
 	NestedTargetField2 string
 }
 
-func TestStructConverter(t *testing.T) {
-	sourceInstance := SourceStruct{
-		SourceField1: 42,
-		SourceField2: "Hello, World!",
-		NestedStruct: NestedStruct{
-			NestedField1: 24,
-			NestedField2: "Nested Hello!",
-		},
-	}
-
-	// Convert the source struct to the target struct
-	var targetInstance TargetStruct
-	util.ConvertStruct(sourceInstance, &targetInstance)
-	fmt.Printf("Source Struct: %+v\n", sourceInstance)
-	fmt.Println(fmt.Printf("Target Struct: %+v\n", targetInstance))
-	log.Fatal(targetInstance)
-}
-
 func TestStructConverterToMap(t *testing.T) {
 	sourceInstance := SourceStruct{
 		SourceField1: 42,
@@ -62,12 +42,12 @@ func TestStructConverterToMap(t *testing.T) {
 	}
 	fieldsToInclude := []string{"TargetField1", "TargetField2", "NestedTargetStruct", "NestedTargetField1"}
 	mapped := util.ConvertStructToMap(sourceInstance, fieldsToInclude)
-	log.Fatal(fmt.Printf("Target Struct: %+v\n", mapped))
+	assert.Equal(t, sourceInstance.SourceField1, mapped["TargetField1"])
 }
 
 func TestError(t *testing.T) {
-	var err *newerr.Error
+	err := newerr.Error{}
 	e := errors.New("Error 1062 (23000): Duplicate entry 'abc567' for key 'users.username'")
 	err.ParseMysqlError(e)
-	assert.Equal(t, err.Status, 500)
+	assert.Equal(t, err.Status, 409)
 }

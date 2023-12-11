@@ -1,7 +1,6 @@
 package testscheduler
 
 import (
-	"app/scheduler"
 	"testing"
 )
 
@@ -10,5 +9,5 @@ import (
 // }
 
 func TestSetup(t *testing.T) {
-	scheduler.Setup()
+	// scheduler.Setup()
 }

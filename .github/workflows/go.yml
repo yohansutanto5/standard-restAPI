@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GIN_MODE: test
-      config: ../cmd/config/
+      config: ../../cmd/config/
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2

@@ -3,7 +3,9 @@ package test
 import (
 	newerr "app/pkg/error"
 	"app/pkg/util"
+	"bytes"
 	"errors"
+	"os/exec"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -50,4 +52,13 @@ func TestError(t *testing.T) {
 	e := errors.New("Error 1062 (23000): Duplicate entry 'abc567' for key 'users.username'")
 	err.ParseMysqlError(e)
 	assert.Equal(t, err.Status, 409)
+}
+
+func TestExec(t *testing.T) {
+	a := exec.Command("pwd")
+	var stdout bytes.Buffer
+	a.Stdout = &stdout
+	err := a.Run()
+	t.Logf(stdout.String())
+	assert.Nil(t, err)
 }

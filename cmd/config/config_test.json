@@ -37,7 +37,7 @@
         "jenkins": "https://example.com/jenkins"
     },
     "dir" : {
-        "sql" : "../db/sql_migrations/"
+        "sql" : "../../db/sql_migrations/"
     },
     "kafka" : {
         "hostname"        : "dory.srvs.cloudkafka.com",

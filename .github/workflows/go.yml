@@ -21,11 +21,17 @@ jobs:
         go-version: 1.21
 
     - name: Run Unit Test
-      run: go test ./test/...
+      run: go test ./test/... -json > TestResults-${{ github.sha }}.json
 
     - name: Stop if tests fail
       if: ${{ failure() }}
       run: exit 1
+
+    - name: Upload Go test results
+      uses: actions/upload-artifact@v3
+      with:
+        name: Go-results-${{ github.sha }}
+        path: TestResults-${{ github.sha }}.json
 
     - name: Build Go application
       run: go build -o backend ./cmd/.

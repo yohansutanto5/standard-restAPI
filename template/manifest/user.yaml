@@ -1,0 +1,72 @@
+model: User
+type: api
+fields:
+  - name: ID
+    type: int
+    binding: required
+    constraint: primaryKey;autoIncrement
+    input: false
+    output: true
+  - name: Username
+    type: string
+    binding: required
+    constraint: type:VARCHAR(20);not null;unique
+    input: true
+    output: true
+  - name: FirstName
+    type: string
+    binding: required
+    constraint: type:VARCHAR(70);not null;
+    input: true
+    output: true
+  - name: LastName
+    type: string
+    binding: none
+    constraint: type:VARCHAR(70);
+    input: true
+    output: true
+  - name: ProfileID
+    type: int
+    binding: none
+    constraint: not null;
+    input: true
+    output: true
+  - name: Profile
+    type: UserProfile
+    binding: none
+    constraint: foreignKey:ProfileID
+    input: false
+    output: false
+  - name: Email
+    type: string
+    binding: email
+    constraint: type:VARCHAR(70);not null;
+    input: true
+    output: true
+  - name: Active
+    type: bool
+    binding: none
+    constraint: type:bool;not null;
+    input: false
+    output: true
+  - name: Created
+    type: time.Time
+    binding: none
+    constraint: type:date;default:(CURRENT_DATE)
+    input: false
+    output: true
+  - name: Updated
+    type: time.Time
+    binding: none
+    constraint: type:date;default:(CURRENT_DATE)
+    input: true
+    output: false
+routers:
+  - method: get
+    call: GetList
+    path: /user 
+    instruction: Get list the city
+  - method: post
+    call: Insert
+    path: /user
+    instruction: Function to add new city

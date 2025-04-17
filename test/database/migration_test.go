@@ -3,7 +3,6 @@ package dbtest
 import (
 	"app/cmd/config"
 	"app/db"
-	"app/model"
 	"log"
 	"os"
 	"testing"
@@ -36,6 +35,6 @@ func TestMigration(t *testing.T) {
 }
 
 func TestGormMigration(t *testing.T) {
-	err := ds.Db.AutoMigrate(model.UserProfile{}, model.User{})
+	err := ds.Db.AutoMigrate()
 	assert.Nil(t, err)
 }

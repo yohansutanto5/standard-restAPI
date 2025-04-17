@@ -13,21 +13,24 @@ func setupRoutes() *gin.Engine {
 	r.Use(middleware, gin.Recovery())
 
 	// Initiate all Handler and dependency
-	userHandler := handler.NewUserHandler(database)
-	UserProfilehandler := handler.NewUserProfileHandler(database)
 	systemHander := handler.NewSystemHandler(database)
+
+	UserProfilehandler := handler.NewUserProfileHandler(database)
+		Userhandler:= handler.NewUserHandler(database)
+ //{.NewHandler}
 
 	// Define The route Path
 	// ---- System API ---
 	r.GET("/health", systemHander.GetSystemHealth)
 
-	// ---- User API ---
-	r.POST("/user", userHandler.Insert)
-	r.GET("/user", userHandler.GetList)
-
-	// ---- UserProfile API ---
-	r.POST("/userprofile", UserProfilehandler.Insert)
 	r.GET("/userprofile", UserProfilehandler.GetList)
+	r.POST("/userprofile", UserProfilehandler.Insert)
+
+	// ---- User API ---
+		r.GET("/user", Userhandler.GetList)
+	r.POST("/user", Userhandler.Insert)
+	// ---- {.model} API ---
+ //{.NewRoute}
 
 	return r
 }

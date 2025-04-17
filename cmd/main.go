@@ -3,7 +3,6 @@ package main
 import (
 	"app/cmd/config"
 	"app/db"
-	"app/model"
 	"app/pkg/log"
 	"os"
 )
@@ -26,9 +25,9 @@ func main() {
 	// Initiate UP SQL Migrations
 	// If fail will execute down migrations then exit the application
 	// db.Migration(&configuration, false)
-	if true {
+	if false {
 		log.System("SQL Migration is Starting")
-		err := database.Db.AutoMigrate(model.UserProfile{}, model.User{})
+		err := database.Db.AutoMigrate()
 		if err != nil {
 			log.Fatal(err.Error())
 		}

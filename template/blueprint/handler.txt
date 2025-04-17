@@ -1,0 +1,62 @@
+package handler
+
+import (
+	"app/constanta"
+	"app/db"
+	"app/model"
+	"app/pkg/util"
+	"app/service"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type {.model}Handler struct {
+	CRUDHandler
+	{.model}Service service.{.model}Service
+}
+
+func New{.model}Handler(db *db.DataStore) {.model}Handler {
+	svc := service.New{.model}Service(db)
+	h := {.model}Handler{
+		{.model}Service: svc,
+	}
+	return h
+}
+
+
+
+func (h *{.model}Handler) GetList(c *gin.Context) {
+	// Call Service
+	result, err := h.{.model}Service.GetList()
+
+	// Construct Response
+	if err != nil {
+		c.Errors = append(c.Errors, err.GenerateReponse(util.GetTransactionID(c)))
+		c.JSON(err.Status, err.Response)
+	} else {
+		c.JSON(http.StatusOK, result)
+	}
+}
+
+func (h *{.model}Handler) Insert(c *gin.Context) {
+	// Cast data from request
+	var data model.{.model}Input
+	if err := c.ShouldBindJSON(&data); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	// Construct {.model} Model with the request data
+	new{.model} := &model.{.model}{}
+	new{.model}.PopulateFromDTOInput(data)
+	// Call create service
+	err := h.{.model}Service.Insert(new{.model})
+
+	// Construct Response
+	if err != nil {
+		err.GenerateReponse(util.GetTransactionID(c))
+		c.JSON(err.Status, err.Response)
+	} else {
+		c.JSON(http.StatusCreated, constanta.SuccessMessage)
+	}
+}

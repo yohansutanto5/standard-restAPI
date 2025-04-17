@@ -18,13 +18,12 @@ func TestGetList(t *testing.T) {
 
 func TestInsert(t *testing.T) {
 	// Instantiate test data
-	var data model.AddUserIn
+	var data model.UserInput
 	data.FirstName = util.GenerateRandomString(5)
 	data.LastName = util.GenerateRandomString(4)
 	data.Email = "asdv@gma.com"
-	data.Profile = 1
 	data.Username = util.GenerateRandomString(5)
-	
+
 	// Inject test data to request context
 	// Marshal data to JSON
 	jsonData, err := json.Marshal(data)

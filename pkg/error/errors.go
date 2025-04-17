@@ -1,8 +1,6 @@
 package error
 
 import (
-	"app/model"
-	"app/pkg/log"
 	"fmt"
 	"net/http"
 	"regexp"
@@ -70,27 +68,20 @@ func New(err error) *Error {
 	}
 }
 
-func (e *Error) LogError() {
-	customLog := model.CustomLog{}
-	log.Error(customLog)
-}
-
-func (e *Error) SetStatus() {
-	if e.Code == "" {
-		e.Status = http.StatusBadRequest
-	}
-}
-
-func (e *Error) ParseMysqlError(err error) {
+func ParseMysqlError(err error) *Error {
 	if err == nil {
-		return
+		return nil
 	}
+	e := &Error{}
 
-	re := regexp.MustCompile(`Error (\d+) \((\d+)\): (.+)`)
+	re := regexp.MustCompile(`Error (.+) \((.+)\): (.+)`)
 	match := re.FindStringSubmatch(err.Error())
-	if len(match) == 4 {
+	if len(match) >= 4 {
 		e.Message = match[3]
 		e.Code = "APP-DB-" + match[1]
+	} else {
+		e.Code = "APP-DB-UNKNOWN"
+		e.Message = err.Error()
 	}
 	// handle the HTTP status
 	switch e.Code {
@@ -102,4 +93,5 @@ func (e *Error) ParseMysqlError(err error) {
 	default:
 		e.Status = http.StatusInternalServerError
 	}
+	return e
 }

@@ -5,8 +5,10 @@ import (
 	"app/model"
 	"app/pkg/error"
 	"app/pkg/log"
+	"bytes"
 	"fmt"
 	"math/rand"
+	"runtime/debug"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -20,7 +22,7 @@ func middleware(c *gin.Context) {
 		if err := recover(); err != nil {
 			// Handle the error, log it, and send an appropriate response.
 			c.JSON(500, gin.H{"error": "Internal Server Error"})
-			log.Warning(transactionID, fmt.Sprintf("%v", err), "Recover from Panic")
+			log.Warning(transactionID, fmt.Sprintf("%v", err), printStack(5))
 		}
 	}()
 
@@ -37,17 +39,21 @@ func middleware(c *gin.Context) {
 		Status:        c.Writer.Status(),
 		Duration:      time.Duration(time.Since(start).Milliseconds()),
 	}
-	if c.Writer.Status() <= 400 {
+	if c.Writer.Status() <= 404 {
 		responseLog.Code = constanta.CodeOK
 		responseLog.Message = constanta.SuccessMessage
 		log.Info(responseLog)
 	} else {
-		v := c.Errors.Last().Meta //gin err
-		e, _ := v.(*error.Error)
-		responseLog.Code = e.Response.Code
-		responseLog.Message = e.Response.Message
-		responseLog.Data = e.Response.Details
-		log.Error(responseLog)
+		if lastError := c.Errors.Last(); lastError != nil {
+			if v := lastError.Meta; v != nil {
+				if e, ok := v.(*error.Error); ok {
+					responseLog.Code = e.Response.Code
+					responseLog.Message = e.Response.Message
+					responseLog.Data = e.Response.Details
+					log.Error(responseLog)
+				}
+			}
+		} 
 	}
 
 }
@@ -56,4 +62,22 @@ func generateTransactionID() int {
 	min := 100000
 	max := 999999
 	return rand.Intn(max-min+1) + min
+}
+
+func printStack(depth int) string {
+	stackTrace := debug.Stack()
+	lines := make([]string, 0)
+
+	// Split the stack trace into lines
+	for _, line := range bytes.Split(stackTrace, []byte{'\n'}) {
+		lines = append(lines, string(line))
+	}
+
+	// Build the stack trace string up to the specified depth
+	var buffer bytes.Buffer
+	for i := 0; i < depth && i < len(lines); i++ {
+		buffer.WriteString(lines[i])
+		buffer.WriteString("\n")
+	}
+	return buffer.String()
 }

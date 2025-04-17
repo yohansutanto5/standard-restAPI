@@ -1,0 +1,1 @@
+Error 1050 (42S01): Table 'users' already exists

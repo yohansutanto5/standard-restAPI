@@ -1,0 +1,27 @@
+model: Pet
+fields:
+  - name: ID
+    type: int
+    binding: required
+    constraint: primaryKey;autoIncrement
+  - name: Stupid
+    type: string
+    binding: required
+    constraint: primaryKey;autoIncrement
+  - name: Arm
+    type: string
+    binding: none
+    constraint: notNull
+  - name: Isfurry
+    type: bool
+    binding: none
+    constraint: notNull
+routers:
+  - method: get
+    call: GetList
+    path: /pet
+    instruction: Get list of user Pet with customizeable filter
+  - method: post
+    call: Insert
+    path: /insert
+    instruction: Function to add new Pet of user

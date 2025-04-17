@@ -1,0 +1,24 @@
+model: UserProfile
+type: api
+fields:
+  - name: ID
+    type: int
+    binding: none
+    constraint: primaryKey;autoIncrement
+    input: false
+    output: true
+  - name: Name
+    type: string
+    binding: required
+    constraint: type:VARCHAR(20);not null;
+    input: true
+    output: true
+routers:
+  - method: get
+    call: GetList
+    path: /userprofile 
+    instruction: Get list the city
+  - method: post
+    call: Insert
+    path: /userprofile
+    instruction: Function to add new city
